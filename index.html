@@ -1,0 +1,765 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Personal Portfolio - Cute Aesthetic Concept Showcase</title>
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Google Fonts: Fredoka (Cute Rounded Headers), Quicksand (Aesthetic Soft Sans), JetBrains Mono -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600;700&family=Quicksand:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Quicksand', 'sans-serif'],
+                        display: ['Fredoka', 'sans-serif'],
+                        mono: ['JetBrains Mono', 'monospace'],
+                    },
+                    colors: {
+                        purpleDark: '#2e1065',
+                        purpleCard: '#ffffff',
+                        purpleBorder: '#e9d5ff',
+                        lavenderBg: '#f5f0ff',
+                        lavenderSoft: '#f3e8ff',
+                        lavenderText: '#581c87',
+                        lilac: '#c084fc',
+                        softPurple: '#a855f7',
+                        cutePink: '#f472b6',
+                        cuteRose: '#fb7185',
+                        softPeach: '#fde68a',
+                        softMint: '#a7f3d0',
+                        deepPurple: '#3b0764',
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        /* Custom Keyframes & Aesthetic Animations */
+        @keyframes spinSlow {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+        @keyframes float {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-6px); }
+        }
+        @keyframes pulseGlow {
+            0%, 100% { box-shadow: 0 0 15px rgba(192, 132, 252, 0.25); }
+            50% { box-shadow: 0 0 25px rgba(244, 114, 182, 0.4); }
+        }
+        
+        .animate-spin-slow {
+            animation: spinSlow 14s linear infinite;
+        }
+        .animate-float {
+            animation: float 4s ease-in-out infinite;
+        }
+        .pulse-purple-glow {
+            animation: pulseGlow 3s infinite;
+        }
+
+        /* Vinyl Disc Slide Effect */
+        .vinyl-sleeve {
+            transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+        .group:hover .vinyl-disc {
+            transform: translateX(52%) rotate(180deg);
+        }
+
+        /* Glassmorphism & Cute Pastel Shadows */
+        .glass-purple {
+            background: rgba(255, 255, 255, 0.85);
+            backdrop-filter: blur(14px);
+            border: 1px solid rgba(192, 132, 252, 0.3);
+        }
+        .glass-purple-light {
+            background: rgba(255, 255, 255, 0.92);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(233, 213, 255, 0.8);
+        }
+
+        /* Aesthetic Pastel Paper Texture */
+        .cute-paper-bg {
+            background-color: #faf5ff;
+            background-image: radial-gradient(#e9d5ff 1px, transparent 1px);
+            background-size: 20px 20px;
+        }
+
+        /* Custom Soft Scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+            height: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #f3e8ff;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #c084fc;
+            border-radius: 9999px;
+        }
+    </style>
+</head>
+<body class="bg-gradient-to-br from-purple-100/70 via-pink-50/60 to-indigo-50/70 text-purple-950 font-sans min-h-screen flex flex-col antialiased selection:bg-lilac selection:text-white">
+
+    <!-- Top Concept Control Bar -->
+    <header class="sticky top-0 z-50 bg-white/85 backdrop-blur-md border-b border-purple-200/80 px-4 py-3 shadow-sm">
+        <div class="max-w-7xl mx-auto flex flex-col md:flex-row items-center justify-between gap-4">
+            
+            <div class="flex items-center gap-3">
+                <div class="p-2.5 bg-purple-100 text-softPurple rounded-2xl border border-purple-200 animate-float shadow-sm">
+                    <i data-lucide="sparkles" class="w-5 h-5"></i>
+                </div>
+                <div>
+                    <div class="font-mono text-xs text-softPurple uppercase tracking-widest mb-2 flex items-center gap-1.5 font-bold">
+                        <i data-lucide="stars" class="w-3.5 h-3.5 text-cutePink"></i>
+                        <span>[ ARCHIVE CATALOG // VOL. 01 ]</span>
+                    </div>
+                    <h1 class="font-display text-4xl md:text-6xl font-bold tracking-tight text-purple-950">Yara's AI World</h1>
+                    <p class="font-sans font-semibold text-purple-700 text-base mt-2 flex items-center gap-2">
+                        <span>Web Creator, Avid Reader & Vinyl Lover</span>
+                        <span class="text-cutePink">🌸</span>
+                    </p>
+                </div>
+            </div>
+
+            <!-- Concept Selector Tabs -->
+            <nav class="flex items-center gap-1.5 bg-purple-100/70 p-1.5 rounded-2xl border border-purple-200/80 text-xs font-semibold overflow-x-auto w-full md:w-auto">
+                <button onclick="switchConcept('concept-1')" id="btn-concept-1" class="concept-btn px-3.5 py-2 rounded-xl flex items-center gap-2 transition-all duration-200 text-purple-700 hover:text-purple-950">
+                    <i data-lucide="book-heart" class="w-4 h-4 text-cutePink"></i>
+                    <span>1. Library Index</span>
+                </button>
+                <button onclick="switchConcept('concept-2')" id="btn-concept-2" class="concept-btn px-3.5 py-2 rounded-xl flex items-center gap-2 transition-all duration-200 text-purple-700 hover:text-purple-950">
+                    <i data-lucide="disc-3" class="w-4 h-4 text-softPurple"></i>
+                    <span>2. Vinyl Studio</span>
+                </button>
+                <button onclick="switchConcept('concept-3')" id="btn-concept-3" class="concept-btn px-3.5 py-2 rounded-xl flex items-center gap-2 transition-all duration-200 text-purple-700 hover:text-purple-950">
+                    <i data-lucide="layout-grid" class="w-4 h-4 text-emerald-500"></i>
+                    <span>3. Bento Box</span>
+                </button>
+                <button onclick="switchConcept('concept-4')" id="btn-concept-4" class="concept-btn px-3.5 py-2 rounded-xl flex items-center gap-2 transition-all duration-200 text-purple-700 hover:text-purple-950">
+                    <i data-lucide="coffee" class="w-4 h-4 text-amber-500"></i>
+                    <span>4. Tactile Workspace</span>
+                </button>
+            </nav>
+
+            <!-- Global Audio Player Widget -->
+            <div class="hidden xl:flex items-center gap-3 bg-white px-3.5 py-2 rounded-2xl border border-purple-200 text-xs text-purple-900 shadow-sm">
+                <div class="relative flex items-center justify-center p-1.5 bg-purple-100 rounded-xl text-softPurple">
+                    <i data-lucide="music-2" class="w-4 h-4 animate-bounce"></i>
+                </div>
+                <div class="truncate max-w-[130px]">
+                    <div class="font-display font-bold text-purple-950 truncate" id="now-playing-title">Lofi Lavender Beats</div>
+                    <div class="text-[10px] text-purple-500 truncate font-medium">Chill music for coding</div>
+                </div>
+                <button onclick="toggleGlobalAudio()" id="audio-toggle-btn" class="p-2 bg-purple-50 hover:bg-purple-100 rounded-xl transition text-softPurple border border-purple-200">
+                    <i data-lucide="play" id="audio-icon" class="w-4 h-4 fill-current"></i>
+                </button>
+            </div>
+
+        </div>
+    </header>
+
+    <main class="flex-grow relative overflow-hidden" id="concept-viewport">
+
+        <!-- CONCEPT 1: EDITORIAL LIBRARY INDEX (LIGHT PASTEL) -->
+        <section id="concept-1" class="concept-section hidden min-h-full cute-paper-bg text-purple-950 p-6 md:p-12 transition-all duration-300">
+            <div class="max-w-5xl mx-auto space-y-10">
+                
+                <!-- Cute Editorial Header -->
+                <header class="border-b-2 border-purple-200 pb-8 flex flex-col md:flex-row justify-between items-start md:items-end gap-6">
+                    <div>
+                        <div class="font-mono text-xs text-softPurple uppercase tracking-widest mb-2 flex items-center gap-1.5 font-bold">
+                            <i data-lucide="stars" class="w-3.5 h-3.5 text-cutePink"></i>
+                            <span>[ ARCHIVE CATALOG // VOL. 01 ]</span>
+                        </div>
+                        <h1 class="font-display text-4xl md:text-6xl font-bold tracking-tight text-purple-950">Alex's Reading Nook</h1>
+                        <p class="font-sans font-semibold text-purple-700 text-base mt-2 flex items-center gap-2">
+                            <span>Web Creator, Avid Reader & Vinyl Lover</span>
+                            <span class="text-cutePink">🌸</span>
+                        </p>
+                    </div>
+                    
+                    <!-- Reading / Listening Badge -->
+                    <div class="glass-purple-light p-4 rounded-2xl font-mono text-xs space-y-2 max-w-xs shadow-md border-purple-200">
+                        <div class="flex items-center gap-2 text-purple-900 font-bold border-b border-purple-200 pb-1.5 font-sans">
+                            <i data-lucide="book-open-check" class="w-4 h-4 text-softPurple"></i>
+                            <span>CURRENTLY READING</span>
+                        </div>
+                        <p class="font-display font-bold text-purple-950 text-sm">"Before the Coffee Gets Cold"</p>
+                        <div class="w-full bg-purple-100 h-2.5 rounded-full overflow-hidden border border-purple-200">
+                            <div class="bg-gradient-to-r from-softPurple to-cutePink h-full w-[72%] rounded-full"></div>
+                        </div>
+                    </div>
+                </header>
+
+                <!-- Library Grid Layout -->
+                <div class="grid grid-cols-1 lg:grid-cols-12 gap-10">
+                    
+                    <!-- Table of Contents -->
+                    <aside class="lg:col-span-4 space-y-6">
+                        <div class="border-b-2 border-purple-200 pb-2 flex items-center gap-2">
+                            <i data-lucide="bookmark" class="w-4 h-4 text-softPurple"></i>
+                            <h2 class="font-display font-bold text-lg text-purple-950">CHAPTERS</h2>
+                        </div>
+                        <ul class="font-sans font-medium text-sm space-y-3 text-purple-800">
+                            <li>
+                                <a href="#cat-games" class="flex justify-between items-center hover:text-softPurple transition group border-b border-dashed border-purple-200 pb-2">
+                                    <span class="flex items-center gap-2 font-display font-bold text-purple-900">
+                                        <span class="text-xs text-purple-400 font-mono">[01]</span> BROWSER GAMES
+                                    </span>
+                                    <span class="text-xs bg-purple-100 text-purple-700 font-bold px-2 py-0.5 rounded-full border border-purple-200">2 entries</span>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="#cat-audio" class="flex justify-between items-center hover:text-softPurple transition group border-b border-dashed border-purple-200 pb-2">
+                                    <span class="flex items-center gap-2 font-display font-bold text-purple-900">
+                                        <span class="text-xs text-purple-400 font-mono">[02]</span> AUDIO TECH
+                                    </span>
+                                    <span class="text-xs bg-purple-100 text-purple-700 font-bold px-2 py-0.5 rounded-full border border-purple-200">1 entry</span>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="#cat-writing" class="flex justify-between items-center hover:text-softPurple transition group border-b border-dashed border-purple-200 pb-2">
+                                    <span class="flex items-center gap-2 font-display font-bold text-purple-900">
+                                        <span class="text-xs text-purple-400 font-mono">[03]</span> BOOK VAULT
+                                    </span>
+                                    <span class="text-xs bg-purple-100 text-purple-700 font-bold px-2 py-0.5 rounded-full border border-purple-200">1 entry</span>
+                                </a>
+                            </li>
+                        </ul>
+
+                        <!-- Cute Quote Widget -->
+                        <div class="p-5 bg-white/90 border-2 border-purple-200 rounded-2xl text-purple-900 text-sm leading-relaxed font-sans shadow-sm relative">
+                            <i data-lucide="quote" class="w-6 h-6 text-purple-300 absolute top-3 right-3 opacity-60"></i>
+                            <p class="font-semibold italic">"Organized code, good books, and soft tunes make the perfect creative afternoon."</p>
+                        </div>
+                    </aside>
+
+                    <!-- Right Catalog Deck -->
+                    <div class="lg:col-span-8 space-y-6">
+                        <div class="border-b-2 border-purple-200 pb-2 flex justify-between items-center">
+                            <h2 class="font-display font-bold text-lg text-purple-950 flex items-center gap-2">
+                                <span>PROJECT INDEX CARDS</span>
+                                <i data-lucide="sparkle" class="w-4 h-4 text-cutePink"></i>
+                            </h2>
+                            <span class="font-mono text-xs text-purple-500 font-bold">SORTED BY RECENT</span>
+                        </div>
+
+                        <!-- Cute Card 1 -->
+                        <article class="bg-white p-6 rounded-2xl border-2 border-purple-200 shadow-[4px_4px_0px_0px_rgba(192,132,252,0.4)] hover:-translate-y-1 transition duration-200">
+                            <div class="flex justify-between items-start">
+                                <span class="font-mono text-xs bg-purple-100 text-purple-800 font-bold px-2.5 py-1 rounded-lg border border-purple-200">[ENTRY #001]</span>
+                                <span class="font-mono text-xs text-purple-400 font-bold">2026 // HTML5 Canvas</span>
+                            </div>
+                            <h3 class="font-display text-2xl font-bold text-purple-950 mt-3">Vertical Jumper Game</h3>
+                            <p class="font-sans text-purple-800 text-sm mt-2 leading-relaxed font-medium">
+                                High-speed spacebar vertical browser game with cute cloud platforms, star pickups, and score tracking!
+                            </p>
+                            <div class="mt-4 pt-4 border-t border-purple-100 flex flex-wrap justify-between items-center gap-3">
+                                <div class="flex gap-2 font-mono text-[11px] text-purple-600 font-semibold">
+                                    <span class="bg-purple-50 border border-purple-200/80 px-2 py-0.5 rounded-md">#game-dev</span>
+                                    <span class="bg-purple-50 border border-purple-200/80 px-2 py-0.5 rounded-md">#canvas</span>
+                                </div>
+                                <a href="#" class="font-display text-xs font-bold bg-softPurple text-white px-4 py-2 rounded-xl hover:bg-deepPurple transition flex items-center gap-1.5 shadow-sm">
+                                    <span>PLAY NOW</span>
+                                    <i data-lucide="sparkles" class="w-3.5 h-3.5"></i>
+                                </a>
+                            </div>
+                        </article>
+
+                        <!-- Cute Card 2 -->
+                        <article class="bg-white p-6 rounded-2xl border-2 border-purple-200 shadow-[4px_4px_0px_0px_rgba(244,114,182,0.4)] hover:-translate-y-1 transition duration-200">
+                            <div class="flex justify-between items-start">
+                                <span class="font-mono text-xs bg-pink-100 text-pink-800 font-bold px-2.5 py-1 rounded-lg border border-pink-200">[ENTRY #002]</span>
+                                <span class="font-mono text-xs text-purple-400 font-bold">2026 // Web Audio</span>
+                            </div>
+                            <h3 class="font-display text-2xl font-bold text-purple-950 mt-3">Vinyl Wave Visualizer</h3>
+                            <p class="font-sans text-purple-800 text-sm mt-2 leading-relaxed font-medium">
+                                Interactive sound frequency scope turning lofi tracks into mesmerizing purple neon vinyl waves.
+                            </p>
+                            <div class="mt-4 pt-4 border-t border-purple-100 flex flex-wrap justify-between items-center gap-3">
+                                <div class="flex gap-2 font-mono text-[11px] text-purple-600 font-semibold">
+                                    <span class="bg-pink-50 border border-pink-200/80 px-2 py-0.5 rounded-md">#audio-api</span>
+                                    <span class="bg-pink-50 border border-pink-200/80 px-2 py-0.5 rounded-md">#visuals</span>
+                                </div>
+                                <a href="#" class="font-display text-xs font-bold bg-cutePink text-white px-4 py-2 rounded-xl hover:bg-pink-600 transition flex items-center gap-1.5 shadow-sm">
+                                    <span>LAUNCH TOOL</span>
+                                    <i data-lucide="disc" class="w-3.5 h-3.5"></i>
+                                </a>
+                            </div>
+                        </article>
+
+                    </div>
+
+                </div>
+
+            </div>
+        </section>
+
+        <!-- CONCEPT 2: VINYL SLEEVE & AUDIO STUDIO (PASTEL POP) -->
+        <section id="concept-2" class="concept-section hidden min-h-full bg-gradient-to-br from-purple-100/80 via-pink-50 to-indigo-100/80 text-purple-950 p-6 md:p-12 transition-all duration-300">
+            <div class="max-w-6xl mx-auto space-y-10">
+                
+                <!-- Header -->
+                <header class="flex flex-col md:flex-row justify-between items-start md:items-center gap-6 border-b border-purple-200 pb-8">
+                    <div>
+                        <div class="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-white border border-purple-200 text-softPurple font-display text-xs tracking-wider uppercase mb-3 shadow-sm font-bold">
+                            <span class="w-2.5 h-2.5 rounded-full bg-cutePink animate-ping"></span>
+                            <span>Pastel Vinyl Releases</span>
+                        </div>
+                        <h1 class="font-display text-4xl md:text-5xl font-bold text-purple-950 tracking-tight flex items-center gap-3">
+                            <span>YARA'S AI WORLD</span>
+                            <span class="text-cutePink text-3xl">🩵</span>
+                        </h1>
+                        <p class="text-purple-700 text-sm font-medium mt-1">Interactive album sleeves hosting web projects with sweet sound aesthetics</p>
+                    </div>
+
+                    <!-- Turntable Status -->
+                    <div class="bg-white p-4 rounded-2xl border border-purple-200 flex items-center gap-4 shadow-md pulse-purple-glow">
+                        <div class="relative w-12 h-12 bg-purple-950 rounded-full border-2 border-lilac flex items-center justify-center animate-spin-slow shadow-inner">
+                            <div class="w-4 h-4 bg-cutePink rounded-full border-2 border-white"></div>
+                        </div>
+                        <div>
+                            <div class="text-[10px] text-purple-500 font-mono font-bold">SPINNING NOW</div>
+                            <div class="text-xs font-bold text-purple-950 font-display">Track A: Vertical Jumper</div>
+                            <div class="text-[11px] text-purple-600 font-medium">33 RPM • Hi-Fi Arcade Edition</div>
+                        </div>
+                    </div>
+                </header>
+
+                <!-- Vinyl Shelf Grid -->
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                    
+                    <!-- Vinyl Card 1 -->
+                    <div class="group relative bg-white border border-purple-200 rounded-3xl p-5 hover:border-lilac transition duration-300 flex flex-col justify-between overflow-hidden shadow-lg hover:shadow-xl">
+                        
+                        <!-- Sleeve & Disc Container -->
+                        <div class="relative w-full aspect-square bg-purple-100/50 rounded-2xl overflow-hidden mb-5 flex items-center justify-center border border-purple-200 shadow-md">
+                            
+                            <!-- Sliding Disc -->
+                            <div class="vinyl-disc absolute w-[85%] h-[85%] rounded-full bg-purple-950 border-4 border-purple-900 shadow-2xl flex items-center justify-center transition-transform duration-500 ease-out">
+                                <div class="w-[80%] h-[80%] rounded-full border border-purple-800/60 flex items-center justify-center">
+                                    <div class="w-[60%] h-[60%] rounded-full border border-purple-800/40 flex items-center justify-center">
+                                        <div class="w-[40%] h-[40%] rounded-full bg-lilac flex flex-col items-center justify-center text-[8px] font-bold text-purple-950">
+                                            <span>LP-01</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Sleeve Art -->
+                            <div class="vinyl-sleeve relative z-10 w-full h-full bg-gradient-to-br from-purple-500 via-softPurple to-cutePink p-6 flex flex-col justify-between shadow-lg">
+                                <div class="flex justify-between items-start text-xs font-mono text-white font-bold">
+                                    <span>TRACK 01</span>
+                                    <span>STEREO</span>
+                                </div>
+                                <div>
+                                    <h3 class="font-display font-bold text-2xl text-white drop-shadow-sm">Vertical Jumper</h3>
+                                    <p class="text-xs text-purple-100 font-medium mt-1">Arcade Platformer Game</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Info -->
+                        <div class="space-y-3">
+                            <p class="text-xs text-purple-800 leading-relaxed font-medium">
+                                Spacebar jumper with cute floating obstacles, score multiplier, and vibrant purple stars!
+                            </p>
+                            <div class="flex items-center justify-between pt-2 border-t border-purple-100 text-xs">
+                                <span class="font-mono text-cutePink font-bold text-[11px]">GENRE: BROWSER GAME</span>
+                                <a href="#" class="px-3.5 py-2 bg-softPurple hover:bg-deepPurple text-white font-display font-bold rounded-xl transition flex items-center gap-1.5 text-xs shadow-sm">
+                                    <span>PLAY</span>
+                                    <i data-lucide="play" class="w-3 h-3 fill-current"></i>
+                                </a>
+                            </div>
+                        </div>
+
+                    </div>
+
+                    <!-- Vinyl Card 2 -->
+                    <div class="group relative bg-white border border-purple-200 rounded-3xl p-5 hover:border-cutePink transition duration-300 flex flex-col justify-between overflow-hidden shadow-lg hover:shadow-xl">
+                        
+                        <!-- Sleeve & Disc Container -->
+                        <div class="relative w-full aspect-square bg-purple-100/50 rounded-2xl overflow-hidden mb-5 flex items-center justify-center border border-purple-200 shadow-md">
+                            
+                            <!-- Sliding Disc -->
+                            <div class="vinyl-disc absolute w-[85%] h-[85%] rounded-full bg-purple-950 border-4 border-purple-900 shadow-2xl flex items-center justify-center transition-transform duration-500 ease-out">
+                                <div class="w-[80%] h-[80%] rounded-full border border-purple-800/60 flex items-center justify-center">
+                                    <div class="w-[60%] h-[60%] rounded-full border border-purple-800/40 flex items-center justify-center">
+                                        <div class="w-[40%] h-[40%] rounded-full bg-cutePink flex flex-col items-center justify-center text-[8px] font-bold text-purple-950">
+                                            <span>LP-02</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Sleeve Art -->
+                            <div class="vinyl-sleeve relative z-10 w-full h-full bg-gradient-to-br from-pink-400 via-cutePink to-amber-300 p-6 flex flex-col justify-between shadow-lg">
+                                <div class="flex justify-between items-start text-xs font-mono text-white font-bold">
+                                    <span>TRACK 02</span>
+                                    <span>HI-FI</span>
+                                </div>
+                                <div>
+                                    <h3 class="font-display font-bold text-2xl text-white drop-shadow-sm">Audio Wave Visualizer</h3>
+                                    <p class="text-xs text-pink-100 font-medium mt-1">Sound Frequency Scope</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Info -->
+                        <div class="space-y-3">
+                            <p class="text-xs text-purple-800 leading-relaxed font-medium">
+                                Web audio visualizer rendering live purple wave spectrums in real time.
+                            </p>
+                            <div class="flex items-center justify-between pt-2 border-t border-purple-100 text-xs">
+                                <span class="font-mono text-softPurple font-bold text-[11px]">GENRE: AUDIO TECH</span>
+                                <a href="#" class="px-3.5 py-2 bg-cutePink hover:bg-pink-600 text-white font-display font-bold rounded-xl transition flex items-center gap-1.5 text-xs shadow-sm">
+                                    <span>OPEN</span>
+                                    <i data-lucide="external-link" class="w-3 h-3"></i>
+                                </a>
+                            </div>
+                        </div>
+
+                    </div>
+
+                    <!-- Vinyl Card 3 -->
+                    <div class="group relative bg-white border border-purple-200 rounded-3xl p-5 hover:border-emerald-300 transition duration-300 flex flex-col justify-between overflow-hidden shadow-lg hover:shadow-xl">
+                        
+                        <!-- Sleeve & Disc Container -->
+                        <div class="relative w-full aspect-square bg-purple-100/50 rounded-2xl overflow-hidden mb-5 flex items-center justify-center border border-purple-200 shadow-md">
+                            
+                            <!-- Sliding Disc -->
+                            <div class="vinyl-disc absolute w-[85%] h-[85%] rounded-full bg-purple-950 border-4 border-purple-900 shadow-2xl flex items-center justify-center transition-transform duration-500 ease-out">
+                                <div class="w-[80%] h-[80%] rounded-full border border-purple-800/60 flex items-center justify-center">
+                                    <div class="w-[60%] h-[60%] rounded-full border border-purple-800/40 flex items-center justify-center">
+                                        <div class="w-[40%] h-[40%] rounded-full bg-emerald-300 flex flex-col items-center justify-center text-[8px] font-bold text-purple-950">
+                                            <span>LP-03</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Sleeve Art -->
+                            <div class="vinyl-sleeve relative z-10 w-full h-full bg-gradient-to-br from-emerald-400 via-teal-300 to-softPurple p-6 flex flex-col justify-between shadow-lg">
+                                <div class="flex justify-between items-start text-xs font-mono text-white font-bold">
+                                    <span>TRACK 03</span>
+                                    <span>LITERARY</span>
+                                </div>
+                                <div>
+                                    <h3 class="font-display font-bold text-2xl text-white drop-shadow-sm">Cute Book Vault</h3>
+                                    <p class="text-xs text-teal-100 font-medium mt-1">Reading Tracker Hub</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Info -->
+                        <div class="space-y-3">
+                            <p class="text-xs text-purple-800 leading-relaxed font-medium">
+                                Pastel book logger & favorite quotes collector for cozy readers.
+                            </p>
+                            <div class="flex items-center justify-between pt-2 border-t border-purple-100 text-xs">
+                                <span class="font-mono text-emerald-600 font-bold text-[11px]">GENRE: READING</span>
+                                <a href="#" class="px-3.5 py-2 bg-emerald-400 hover:bg-emerald-500 text-purple-950 font-display font-bold rounded-xl transition flex items-center gap-1.5 text-xs shadow-sm">
+                                    <span>VIEW</span>
+                                    <i data-lucide="book-open" class="w-3 h-3"></i>
+                                </a>
+                            </div>
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+        </section>
+
+        <!-- CONCEPT 3: MINIMALIST BENTO BOX DASHBOARD (LIGHT PASTEL) -->
+        <section id="concept-3" class="concept-section hidden min-h-full bg-gradient-to-br from-purple-50 via-pink-50 to-indigo-50 text-purple-950 p-6 md:p-10 transition-all duration-300">
+            <div class="max-w-6xl mx-auto space-y-6">
+                
+                <!-- Bento Header -->
+                <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 bg-white p-6 rounded-3xl border border-purple-200 shadow-md">
+                    <div>
+                        <span class="text-xs font-mono text-softPurple font-bold uppercase tracking-widest flex items-center gap-1.5">
+                            <i data-lucide="sparkles" class="w-3.5 h-3.5 text-cutePink"></i>
+                            <span>PURPLE PASTEL BENTO DASHBOARD</span>
+                        </span>
+                        <h1 class="font-display text-3xl font-bold text-purple-950 mt-1">Yara's AI World — Links Hub</h1>
+                    </div>
+                    <div class="flex flex-wrap gap-2">
+                        <span class="px-3 py-1 bg-purple-100 text-purple-800 rounded-full text-xs font-semibold border border-purple-200">✨ Cute Web Apps</span>
+                        <span class="px-3 py-1 bg-pink-100 text-pink-800 rounded-full text-xs font-semibold border border-pink-200">🎵 Lofi Music</span>
+                        <span class="px-3 py-1 bg-emerald-100 text-emerald-800 rounded-full text-xs font-semibold border border-emerald-200">📚 Book Nook</span>
+                    </div>
+                </div>
+
+                <!-- Bento Grid Layout -->
+                <div class="grid grid-cols-1 md:grid-cols-12 gap-5">
+                    
+                    <!-- Featured Project (8 cols) -->
+                    <div class="md:col-span-8 bg-white border border-purple-200 rounded-3xl p-6 flex flex-col justify-between hover:border-lilac transition duration-300 relative overflow-hidden group shadow-md hover:shadow-lg">
+                        <div class="absolute top-0 right-0 w-72 h-72 bg-purple-100/60 rounded-full blur-3xl group-hover:bg-purple-200/60 transition"></div>
+                        
+                        <div>
+                            <div class="flex justify-between items-center mb-4">
+                                <span class="px-3 py-1 bg-purple-100 text-softPurple text-xs font-mono font-bold rounded-full border border-purple-200">FEATURED GAME</span>
+                                <span class="text-xs text-purple-400 font-mono font-bold">2026 // HTML5 Canvas</span>
+                            </div>
+                            <h2 class="font-display text-3xl font-bold text-purple-950 mb-2">Vertical Jumper Game</h2>
+                            <p class="text-purple-800 text-sm leading-relaxed max-w-xl font-medium">
+                                Jump across dynamic pastel platforms using Spacebar controls! Features high scores, cloud obstacles, and sparkling star collectibles.
+                            </p>
+                        </div>
+
+                        <div class="mt-8 flex flex-wrap justify-between items-center gap-4">
+                            <div class="flex gap-2">
+                                <span class="px-3 py-1 bg-purple-50 text-purple-800 text-xs rounded-xl border border-purple-200 font-semibold">Spacebar Jump</span>
+                                <span class="px-3 py-1 bg-purple-50 text-purple-800 text-xs rounded-xl border border-purple-200 font-semibold">Endless Heights</span>
+                            </div>
+                            <a href="#" class="px-5 py-2.5 bg-softPurple hover:bg-deepPurple text-white font-display font-bold rounded-2xl text-xs flex items-center gap-2 transition shadow-md">
+                                <span>PLAY GAME NOW</span>
+                                <i data-lucide="sparkles" class="w-4 h-4"></i>
+                            </a>
+                        </div>
+                    </div>
+
+                    <!-- Music Widget (4 cols) -->
+                    <div class="md:col-span-4 bg-white border border-purple-200 rounded-3xl p-6 flex flex-col justify-between shadow-md">
+                        <div>
+                            <div class="flex justify-between items-center mb-3">
+                                <span class="text-xs font-mono text-cutePink font-bold flex items-center gap-1.5">
+                                    <i data-lucide="headphones" class="w-4 h-4"></i>
+                                    <span>MUSIC ROTATION</span>
+                                </span>
+                                <span class="w-2.5 h-2.5 rounded-full bg-cutePink animate-ping"></span>
+                            </div>
+                            <h3 class="font-display font-bold text-purple-950 text-lg">Lofi Coding Vibes</h3>
+                            <p class="text-xs text-purple-600 mt-1 font-medium">Lamp & Tea — Soft Lavender</p>
+                        </div>
+
+                        <!-- Mini Purple Equalizer -->
+                        <div class="my-6 flex items-end gap-1.5 h-12 bg-purple-50 p-3 rounded-2xl border border-purple-200 justify-center">
+                            <span class="w-2 bg-softPurple h-[60%] rounded-full animate-bounce"></span>
+                            <span class="w-2 bg-cutePink h-[90%] rounded-full animate-bounce" style="animation-delay: 0.15s"></span>
+                            <span class="w-2 bg-softPurple h-[40%] rounded-full animate-bounce" style="animation-delay: 0.3s"></span>
+                            <span class="w-2 bg-cutePink h-[75%] rounded-full animate-bounce" style="animation-delay: 0.45s"></span>
+                            <span class="w-2 bg-softPurple h-[50%] rounded-full animate-bounce" style="animation-delay: 0.6s"></span>
+                        </div>
+
+                        <div class="text-[11px] text-purple-500 font-mono text-center font-bold">PLAYING NOW • 33 RPM</div>
+                    </div>
+
+                    <!-- Reading Tracker (4 cols) -->
+                    <div class="md:col-span-4 bg-white border border-purple-200 rounded-3xl p-6 flex flex-col justify-between shadow-md">
+                        <div>
+                            <div class="flex justify-between items-center mb-3">
+                                <span class="text-xs font-mono text-emerald-600 font-bold flex items-center gap-1.5">
+                                    <i data-lucide="book-open" class="w-4 h-4"></i>
+                                    <span>BOOK NOOK</span>
+                                </span>
+                                <span class="text-xs text-emerald-600 font-mono font-bold">72%</span>
+                            </div>
+                            <h3 class="font-display font-bold text-purple-950 text-lg">"Before the Coffee Gets Cold"</h3>
+                            <p class="text-xs text-purple-600 mt-0.5 font-medium">Toshikazu Kawaguchi • Cozy Fiction</p>
+                        </div>
+
+                        <div class="mt-4">
+                            <div class="w-full bg-purple-100 h-2.5 rounded-full overflow-hidden border border-purple-200">
+                                <div class="bg-emerald-400 h-full w-[72%] rounded-full"></div>
+                            </div>
+                            <div class="flex justify-between text-[11px] text-purple-500 mt-2 font-mono font-bold">
+                                <span>PAGE 154</span>
+                                <span>PAGE 213</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Project 02 Bento Box (4 cols) -->
+                    <div class="md:col-span-4 bg-white border border-purple-200 rounded-3xl p-6 flex flex-col justify-between hover:border-lilac transition shadow-md">
+                        <div>
+                            <span class="text-xs font-mono text-softPurple font-bold">AUDIO VISUALIZER</span>
+                            <h3 class="font-display font-bold text-purple-950 text-xl mt-1">Purple Waves JS</h3>
+                            <p class="text-xs text-purple-700 mt-2 leading-relaxed font-medium">Sound frequency analyzer built with Web Audio API & Canvas2D.</p>
+                        </div>
+                        <a href="#" class="mt-4 text-xs font-display font-bold text-softPurple flex items-center gap-1 hover:underline">
+                            <span>EXPLORE TOOL</span>
+                            <i data-lucide="arrow-right" class="w-3.5 h-3.5"></i>
+                        </a>
+                    </div>
+
+                    <!-- Quick Links Bento Box (4 cols) -->
+                    <div class="md:col-span-4 bg-white border border-purple-200 rounded-3xl p-6 flex flex-col justify-between shadow-md">
+                        <div>
+                            <span class="text-xs font-mono text-purple-500 font-bold">CONNECT WITH ME</span>
+                            <h3 class="font-display font-bold text-purple-950 text-xl mt-1">Social Links</h3>
+                        </div>
+                        <div class="grid grid-cols-2 gap-2.5 mt-4">
+                            <a href="#" class="p-3 bg-purple-50 hover:bg-purple-100 rounded-2xl text-xs text-purple-900 font-display font-bold flex items-center gap-2 transition border border-purple-200">
+                                <i data-lucide="github" class="w-4 h-4 text-softPurple"></i>
+                                <span>GitHub</span>
+                            </a>
+                            <a href="#" class="p-3 bg-pink-50 hover:bg-pink-100 rounded-2xl text-xs text-pink-900 font-display font-bold flex items-center gap-2 transition border border-pink-200">
+                                <i data-lucide="twitter" class="w-4 h-4 text-cutePink"></i>
+                                <span>Twitter</span>
+                            </a>
+                        </div>
+                    </div>
+
+                </div>
+
+            </div>
+        </section>
+
+        <!-- CONCEPT 4: TACTILE DESK WORKSPACE (LIGHT PASTEL DESK) -->
+        <section id="concept-4" class="concept-section hidden min-h-full bg-gradient-to-br from-purple-100/60 via-pink-100/40 to-amber-50/50 text-purple-950 p-6 md:p-12 transition-all duration-300">
+            <div class="max-w-5xl mx-auto space-y-8">
+                
+                <!-- Desk Top Header -->
+                <div class="bg-white/90 border border-purple-200 rounded-3xl p-6 flex flex-col md:flex-row justify-between items-start md:items-center gap-4 shadow-md">
+                    <div>
+                        <div class="flex items-center gap-2 text-pink-600 font-mono text-xs font-bold uppercase mb-1">
+                            <i data-lucide="coffee" class="w-4 h-4"></i>
+                            <span>COZY PASTEL TABLETOP</span>
+                        </div>
+                        <h1 class="font-display text-3xl font-bold text-purple-950">Yara's AI World Workspace</h1>
+                    </div>
+                    <div class="flex items-center gap-3">
+                        <button onclick="toggleDeskLamp()" class="px-4 py-2 bg-purple-50 hover:bg-purple-100 text-softPurple text-xs font-display font-bold rounded-2xl border border-purple-200 flex items-center gap-2 transition shadow-sm">
+                            <i data-lucide="lamp" class="w-4 h-4 text-amber-500"></i>
+                            <span id="desk-lamp-status">Desk Lamp: ON ✨</span>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Isometric Desk Items Grid -->
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-8" id="desk-surface">
+                    
+                    <!-- Cute Notebook Item -->
+                    <div class="bg-white text-purple-950 p-6 rounded-3xl shadow-xl border-t-8 border-lilac font-sans space-y-4 border-x border-b border-purple-200">
+                        <div class="flex justify-between items-center border-b border-purple-100 pb-2">
+                            <span class="font-mono text-xs text-softPurple font-bold">📖 CUTE JOURNAL // NOTES</span>
+                            <span class="font-mono text-xs text-purple-400 font-bold">2026</span>
+                        </div>
+                        <h3 class="font-display font-bold text-2xl text-purple-950">Vertical Jumper Game</h3>
+                        <p class="text-xs text-purple-800 leading-relaxed font-semibold italic">
+                            "Designed a super cute vertical jumper with responsive spacebar controls and aesthetic star pickups!"
+                        </p>
+                        <div class="pt-2 flex justify-between items-center text-xs font-mono">
+                            <span class="text-purple-600 font-bold">Status: Ready to play 🌸</span>
+                            <a href="#" class="px-4 py-2 bg-softPurple text-white rounded-xl font-display font-bold hover:bg-deepPurple transition shadow-sm">Launch Game →</a>
+                        </div>
+                    </div>
+
+                    <!-- Purple Cassette Deck -->
+                    <div class="bg-white p-6 rounded-3xl border-2 border-purple-200 shadow-xl space-y-4 flex flex-col justify-between">
+                        <div class="flex justify-between items-center text-xs font-mono text-cutePink font-bold">
+                            <span>📻 LOFI TAPE PLAYER</span>
+                            <span>STEREO CASSETTE</span>
+                        </div>
+                        
+                        <!-- Cassette Graphic -->
+                        <div class="bg-purple-50 border border-purple-200 rounded-2xl p-4 flex justify-around items-center">
+                            <div class="w-10 h-10 rounded-full border-4 border-softPurple border-dashed animate-spin-slow"></div>
+                            <div class="text-center font-mono text-[10px] text-purple-600">
+                                <div class="font-bold text-cutePink">SIDE A</div>
+                                <div class="text-purple-950 font-bold">LOFI CHILL MIX</div>
+                            </div>
+                            <div class="w-10 h-10 rounded-full border-4 border-softPurple border-dashed animate-spin-slow"></div>
+                        </div>
+
+                        <div class="flex justify-between items-center pt-2 text-xs">
+                            <span class="text-purple-700 text-xs font-semibold">Relaxing soundtrack</span>
+                            <button class="px-4 py-2 bg-cutePink hover:bg-pink-500 text-white font-display font-bold rounded-xl text-xs transition shadow-sm">Play Tape</button>
+                        </div>
+                    </div>
+
+                </div>
+
+            </div>
+        </section>
+
+    </main>
+
+    <script>
+        // State Management
+        let activeConcept = 'concept-3'; // Default concept (Bento Box)
+        let isAudioPlaying = false;
+        let isDeskLampOn = true;
+
+        // Initialize Lucide Icons
+        lucide.createIcons();
+
+        // Switch Active Concept Function
+        function switchConcept(conceptId) {
+            activeConcept = conceptId;
+
+            // Hide all concept sections
+            document.querySelectorAll('.concept-section').forEach(section => {
+                section.classList.add('hidden');
+            });
+
+            // Show selected section
+            const selectedSection = document.getElementById(conceptId);
+            if (selectedSection) {
+                selectedSection.classList.remove('hidden');
+            }
+
+            // Update Tab Button Styles for Light Theme
+            document.querySelectorAll('.concept-btn').forEach(btn => {
+                btn.classList.remove('bg-white', 'text-purple-950', 'border', 'border-purple-200', 'shadow-sm');
+                btn.classList.add('text-purple-700');
+            });
+
+            const activeBtn = document.getElementById(`btn-${conceptId}`);
+            if (activeBtn) {
+                activeBtn.classList.add('bg-white', 'text-purple-950', 'border', 'border-purple-200', 'shadow-sm');
+                activeBtn.classList.remove('text-purple-700');
+            }
+        }
+
+        // Toggle Audio Player
+        function toggleGlobalAudio() {
+            isAudioPlaying = !isAudioPlaying;
+            const audioIcon = document.getElementById('audio-icon');
+            if (isAudioPlaying) {
+                audioIcon.setAttribute('data-lucide', 'pause');
+            } else {
+                audioIcon.setAttribute('data-lucide', 'play');
+            }
+            lucide.createIcons();
+        }
+
+        // Toggle Desk Lamp in Concept 4
+        function toggleDeskLamp() {
+            isDeskLampOn = !isDeskLampOn;
+            const deskSurface = document.getElementById('desk-surface');
+            const statusText = document.getElementById('desk-lamp-status');
+
+            if (isDeskLampOn) {
+                deskSurface.style.opacity = '1.0';
+                statusText.textContent = 'Desk Lamp: ON ✨';
+            } else {
+                deskSurface.style.opacity = '0.45';
+                statusText.textContent = 'Desk Lamp: OFF 🌙';
+            }
+        }
+
+        // Initialize on page load
+        window.onload = function() {
+            switchConcept('concept-3'); // Default to cute pastel Bento Box
+        }
+    </script>
+</body>
+</html>
