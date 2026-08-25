@@ -1,0 +1,302 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Vertical Jumper Game</title>
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+    body {
+      background-color: #0d0e1b;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      overflow: hidden;
+      color: white;
+    }
+    #game-container {
+      position: relative;
+      width: 360px;
+      height: 600px;
+      background: radial-gradient(circle at center, #1a1c38 0%, #0a0b16 100%);
+      border: 2px solid #38bdf844;
+      border-radius: 16px;
+      box-shadow: 0 0 30px rgba(56, 189, 248, 0.2);
+      overflow: hidden;
+    }
+    canvas {
+      display: block;
+    }
+    .hud {
+      position: absolute;
+      top: 15px;
+      left: 15px;
+      right: 15px;
+      display: flex;
+      justify-content: space-between;
+      pointer-events: none;
+    }
+    .badge {
+      background: rgba(15, 23, 42, 0.75);
+      border: 1px solid rgba(56, 189, 248, 0.3);
+      padding: 6px 14px;
+      border-radius: 20px;
+      font-size: 14px;
+      font-weight: 700;
+      letter-spacing: 0.5px;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .coin-icon {
+      color: #fbbf24;
+    }
+    #game-over {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(10, 11, 22, 0.85);
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      gap: 15px;
+      display: none;
+    }
+    #game-over h1 {
+      font-size: 28px;
+      color: #f43f5e;
+    }
+    #restart-btn {
+      background: #38bdf8;
+      color: #0f172a;
+      border: none;
+      padding: 10px 20px;
+      border-radius: 8px;
+      font-weight: bold;
+      font-size: 16px;
+      cursor: pointer;
+    }
+    #restart-btn:hover {
+      background: #7dd3fc;
+    }
+  </style>
+</head>
+<body>
+
+  <div id="game-container">
+    <div class="hud">
+      <div class="badge">HEIGHT: <span id="score">0</span>m</div>
+      <div class="badge"><span class="coin-icon">🪙</span> <span id="coins">0</span></div>
+    </div>
+
+    <div id="game-over">
+      <h1>GAME OVER</h1>
+      <p>Final Height: <span id="final-score">0</span>m</p>
+      <button id="restart-btn" onclick="resetGame()">Play Again</button>
+    </div>
+
+    <canvas id="gameCanvas" width="360" height="600"></canvas>
+  </div>
+
+  <script>
+    const canvas = document.getElementById("gameCanvas");
+    const ctx = canvas.getContext("2d");
+
+    // Game Variables
+    let player, platforms, stars, coins;
+    let cameraY = 0;
+    let score = 0;
+    let collectedCoins = 0;
+    let keys = {};
+    let isGameOver = false;
+
+    // Generate Stars background
+    stars = Array.from({ length: 40 }, () => ({
+      x: Math.random() * canvas.width,
+      y: Math.random() * canvas.height,
+      size: Math.random() * 2,
+      opacity: Math.random()
+    }));
+
+    function init() {
+      player = {
+        x: 160,
+        y: 450,
+        w: 32,
+        h: 32,
+        vx: 0,
+        vy: 0,
+        speed: 5,
+        jumpStrength: -11,
+        gravity: 0.4
+      };
+
+      platforms = [
+        { x: 130, y: 520, w: 100, h: 12 }
+      ];
+
+      coins = [];
+      score = 0;
+      collectedCoins = 0;
+      cameraY = 0;
+      isGameOver = false;
+      document.getElementById("game-over").style.display = "none";
+
+      for (let i = 0; i < 7; i++) {
+        addPlatform(400 - i * 75);
+      }
+    }
+
+    function addPlatform(y) {
+      const w = 70 + Math.random() * 20;
+      const x = Math.random() * (canvas.width - w);
+      platforms.push({ x, y, w, h: 12 });
+
+      // Add coin randomly on platform
+      if (Math.random() < 0.4) {
+        coins.push({ x: x + w / 2, y: y - 20, collected: false });
+      }
+    }
+
+    window.addEventListener("keydown", e => keys[e.key] = true);
+    window.addEventListener("keyup", e => keys[e.key] = false);
+
+    function update() {
+      if (isGameOver) return;
+
+      // Player Movement
+      if (keys["ArrowLeft"] || keys["a"] || keys["A"]) player.vx = -player.speed;
+      else if (keys["ArrowRight"] || keys["d"] || keys["D"]) player.vx = player.speed;
+      else player.vx = 0;
+
+      player.vy += player.gravity;
+      player.x += player.vx;
+      player.y += player.vy;
+
+      // Screen Wrap
+      if (player.x < -player.w) player.x = canvas.width;
+      if (player.x > canvas.width) player.x = -player.w;
+
+      // Platform Collision (landing only)
+      if (player.vy > 0) {
+        platforms.forEach(p => {
+          if (
+            player.x + player.w > p.x &&
+            player.x < p.x + p.w &&
+            player.y + player.h >= p.y &&
+            player.y + player.h <= p.y + p.h + player.vy
+          ) {
+            player.vy = player.jumpStrength;
+          }
+        });
+      }
+
+      // Camera Follow
+      if (player.y < canvas.height / 2 + cameraY) {
+        const diff = (canvas.height / 2 + cameraY) - player.y;
+        cameraY -= diff;
+        score = Math.floor(-cameraY / 10);
+      }
+
+      // Generate continuous platforms
+      const topPlatform = platforms[platforms.length - 1];
+      if (topPlatform.y > cameraY - 100) {
+        addPlatform(topPlatform.y - (65 + Math.random() * 25));
+      }
+
+      // Collect Coins
+      coins.forEach(c => {
+        if (!c.collected && Math.hypot(player.x + 16 - c.x, player.y + 16 - c.y) < 20) {
+          c.collected = true;
+          collectedCoins++;
+        }
+      });
+
+      // Update UI
+      document.getElementById("score").innerText = score;
+      document.getElementById("coins").innerText = collectedCoins;
+
+      // Game Over Condition
+      if (player.y - cameraY > canvas.height) {
+        isGameOver = true;
+        document.getElementById("final-score").innerText = score;
+        document.getElementById("game-over").style.display = "flex";
+      }
+    }
+
+    function draw() {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+      ctx.save();
+      ctx.translate(0, -cameraY);
+
+      // Draw background stars
+      ctx.fillStyle = "#ffffff";
+      stars.forEach(s => {
+        ctx.globalAlpha = s.opacity;
+        ctx.fillRect(s.x, s.y + cameraY * 0.2, s.size, s.size);
+      });
+      ctx.globalAlpha = 1.0;
+
+      // Draw Platforms (Glow Blue)
+      ctx.shadowBlur = 10;
+      ctx.shadowColor = "#38bdf8";
+      ctx.fillStyle = "#38bdf8";
+      platforms.forEach(p => {
+        ctx.beginPath();
+        ctx.roundRect(p.x, p.y, p.w, p.h, 6);
+        ctx.fill();
+      });
+
+      // Draw Coins
+      ctx.shadowColor = "#fbbf24";
+      ctx.fillStyle = "#fbbf24";
+      coins.forEach(c => {
+        if (!c.collected) {
+          ctx.beginPath();
+          ctx.arc(c.x, c.y, 7, 0, Math.PI * 2);
+          ctx.fill();
+        }
+      });
+
+      // Draw Player (Glow Green)
+      ctx.shadowColor = "#4ade80";
+      ctx.fillStyle = "#4ade80";
+      ctx.beginPath();
+      ctx.roundRect(player.x, player.y, player.w, player.h, 8);
+      ctx.fill();
+
+      // Player Eyes
+      ctx.fillStyle = "#0f172a";
+      ctx.shadowBlur = 0;
+      ctx.fillRect(player.x + 6, player.y + 8, 6, 8);
+      ctx.fillRect(player.x + 20, player.y + 8, 6, 8);
+
+      ctx.restore();
+    }
+
+    function gameLoop() {
+      update();
+      draw();
+      requestAnimationFrame(gameLoop);
+    }
+
+    function resetGame() {
+      init();
+    }
+
+    init();
+    gameLoop();
+  </script>
+</body>
+</html>
