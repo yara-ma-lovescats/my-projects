@@ -1,26 +1,409 @@
-<div class="w-full space-y-6">
-    <article class="bg-white p-6 md:p-8 rounded-3xl border-2 border-purple-200 shadow-md">
-        <div class="flex justify-between items-start mb-4">
-            <span class="font-mono text-xs bg-purple-100 text-purple-800 font-bold px-3 py-1 rounded-lg border border-purple-200">[ENTRY #001]</span>
-            <span class="font-mono text-xs text-purple-500 font-bold">HTML5 Canvas</span>
-        </div>
-        
-        <h3 class="font-display text-3xl font-bold text-purple-950">Vertical Jumper Game</h3>
-        
-        <p class="font-sans text-purple-800 text-base mt-2 leading-relaxed font-medium">
-            Jump across dynamic pastel platforms using Spacebar controls! Features high scores, cloud obstacles, and sparkling star collectibles.
-        </p>
-        
-        <div class="mt-8 flex flex-wrap justify-between items-center gap-4 border-t border-purple-100 pt-6">
-            <div class="flex gap-2">
-                <span class="px-3 py-1 bg-purple-50 text-purple-800 text-xs rounded-xl border border-purple-200 font-semibold">Spacebar Jump</span>
-                <span class="px-3 py-1 bg-purple-50 text-purple-800 text-xs rounded-xl border border-purple-200 font-semibold">Endless Heights</span>
-            </div>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Yara's AI World - Personal Portfolio Showcase</title>
+
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600;700&family=Quicksand:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Quicksand', 'sans-serif'],
+                        display: ['Fredoka', 'sans-serif'],
+                        mono: ['JetBrains Mono', 'monospace'],
+                    },
+                    colors: {
+                        purpleDark: '#2e1065',
+                        purpleCard: '#ffffff',
+                        purpleBorder: '#e9d5ff',
+                        lavenderBg: '#f5f0ff',
+                        lavenderSoft: '#f3e8ff',
+                        lavenderText: '#581c87',
+                        lilac: '#c084fc',
+                        softPurple: '#a855f7',
+                        cutePink: '#f472b6',
+                        cuteRose: '#fb7185',
+                        softPeach: '#fde68a',
+                        softMint: '#a7f3d0',
+                        deepPurple: '#3b0764',
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        @keyframes spinSlow {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+        @keyframes float {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-6px); }
+        }
+
+        .animate-float { animation: float 4s ease-in-out infinite; }
+
+        .vinyl-sleeve {
+            transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+        .group:hover .vinyl-disc {
+            transform: translateX(52%) rotate(180deg);
+        }
+
+        .glass-purple-light {
+            background: rgba(255, 255, 255, 0.92);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(233, 213, 255, 0.8);
+        }
+
+        .cute-paper-bg {
+            background-color: #faf5ff;
+            background-image: radial-gradient(#e9d5ff 1px, transparent 1px);
+            background-size: 20px 20px;
+        }
+
+        ::-webkit-scrollbar { width: 8px; height: 8px; }
+        ::-webkit-scrollbar-track { background: #f3e8ff; }
+        ::-webkit-scrollbar-thumb { background: #c084fc; border-radius: 9999px; }
+    </style>
+</head>
+<body class="bg-gradient-to-br from-purple-100/70 via-pink-50/60 to-indigo-50/70 text-purple-950 font-sans min-h-screen flex flex-col antialiased selection:bg-lilac selection:text-white">
+
+    <!-- Top Navigation Control Bar -->
+    <header class="sticky top-0 z-40 bg-white/85 backdrop-blur-md border-b border-purple-200/80 px-4 py-3 shadow-sm">
+        <div class="max-w-7xl mx-auto flex flex-col md:flex-row items-center justify-between gap-4">
             
-            <button onclick="launchGame()" class="px-6 py-3 bg-softPurple hover:bg-deepPurple text-white font-display font-bold rounded-2xl text-sm flex items-center gap-2 transition shadow-md cursor-pointer">
-                <span>PLAY GAME NOW</span>
-                <i data-lucide="sparkles" class="w-4 h-4"></i>
-            </button>
+            <div class="flex items-center gap-3">
+                <div class="p-2.5 bg-purple-100 text-softPurple rounded-2xl border border-purple-200 animate-float shadow-sm">
+                    <i data-lucide="sparkles" class="w-5 h-5"></i>
+                </div>
+                <div>
+                    <h1 class="font-display text-2xl font-bold tracking-tight text-purple-950">Yara's AI World</h1>
+                    <p class="font-sans font-semibold text-purple-700 text-xs flex items-center gap-1">
+                        <span>Web Creator & Vinyl Lover</span>
+                        <span class="text-cutePink">🌸</span>
+                    </p>
+                </div>
+            </div>
+
+            <!-- Concept Navigation Tabs -->
+            <nav class="flex items-center gap-1.5 bg-purple-100/70 p-1.5 rounded-2xl border border-purple-200/80 text-xs font-semibold overflow-x-auto w-full md:w-auto">
+                <button onclick="switchConcept('concept-1')" id="btn-concept-1" class="concept-btn px-3.5 py-2 rounded-xl flex items-center gap-2 transition-all duration-200 bg-white text-purple-950 shadow-sm">
+                    <i data-lucide="book-heart" class="w-4 h-4 text-cutePink"></i>
+                    <span>1. Library Index</span>
+                </button>
+                <button onclick="switchConcept('concept-2')" id="btn-concept-2" class="concept-btn px-3.5 py-2 rounded-xl flex items-center gap-2 transition-all duration-200 text-purple-700 hover:text-purple-950">
+                    <i data-lucide="disc-3" class="w-4 h-4 text-softPurple"></i>
+                    <span>2. Vinyl Studio</span>
+                </button>
+                <button onclick="switchConcept('concept-3')" id="btn-concept-3" class="concept-btn px-3.5 py-2 rounded-xl flex items-center gap-2 transition-all duration-200 text-purple-700 hover:text-purple-950">
+                    <i data-lucide="layout-grid" class="w-4 h-4 text-emerald-500"></i>
+                    <span>3. Bento Box</span>
+                </button>
+                <button onclick="switchConcept('concept-4')" id="btn-concept-4" class="concept-btn px-3.5 py-2 rounded-xl flex items-center gap-2 transition-all duration-200 text-purple-700 hover:text-purple-950">
+                    <i data-lucide="coffee" class="w-4 h-4 text-amber-500"></i>
+                    <span>4. Tactile Nook</span>
+                </button>
+            </nav>
+
         </div>
-    </article>
-</div>
+    </header>
+
+    <main class="flex-grow relative overflow-hidden" id="concept-viewport">
+
+        <!-- CONCEPT 1: EDITORIAL LIBRARY INDEX -->
+        <section id="concept-1" class="concept-section min-h-full cute-paper-bg text-purple-950 p-6 md:p-12 transition-all duration-300">
+            <div class="max-w-5xl mx-auto space-y-10">
+                
+                <header class="border-b-2 border-purple-200 pb-8 flex flex-col md:flex-row justify-between items-start md:items-end gap-6">
+                    <div>
+                        <div class="font-mono text-xs text-softPurple uppercase tracking-widest mb-2 flex items-center gap-1.5 font-bold">
+                            <i data-lucide="stars" class="w-3.5 h-3.5 text-cutePink"></i>
+                            <span>[ ARCHIVE CATALOG // VOL. 01 ]</span>
+                        </div>
+                        <h1 class="font-display text-4xl md:text-6xl font-bold tracking-tight text-purple-950">Yara's Reading Nook</h1>
+                    </div>
+                </header>
+
+                <div class="grid grid-cols-1 md:grid-cols-12 gap-8">
+                    <!-- Sidebar Column -->
+                    <aside class="md:col-span-4 space-y-6">
+                        <div class="border-b-2 border-purple-200 pb-2 flex items-center gap-2">
+                            <i data-lucide="bookmark" class="w-4 h-4 text-softPurple"></i>
+                            <h2 class="font-display font-bold text-lg text-purple-950">CHAPTERS</h2>
+                        </div>
+                        <ul class="font-sans font-medium text-sm space-y-3 text-purple-800">
+                            <li>
+                                <div class="flex justify-between items-center border-b border-dashed border-purple-200 pb-2">
+                                    <span class="flex items-center gap-2 font-display font-bold text-purple-900">
+                                        <span class="text-xs text-purple-400 font-mono">[01]</span> BROWSER GAMES
+                                    </span>
+                                    <span class="text-xs bg-purple-100 text-purple-700 font-bold px-2 py-0.5 rounded-full border border-purple-200">1 entry</span>
+                                </div>
+                            </li>
+                        </ul>
+                    </aside>
+
+                    <!-- Main Content Column -->
+                    <div class="md:col-span-8 space-y-6">
+                        <article class="bg-white p-6 rounded-2xl border-2 border-purple-200 shadow-[4px_4px_0px_0px_rgba(192,132,252,0.4)] transition">
+                            <div class="flex justify-between items-start">
+                                <span class="font-mono text-xs bg-purple-100 text-purple-800 font-bold px-2.5 py-1 rounded-lg border border-purple-200">[ENTRY #001]</span>
+                                <span class="font-mono text-xs text-purple-400 font-bold">HTML5 Canvas</span>
+                            </div>
+                            <h3 class="font-display text-2xl font-bold text-purple-950 mt-3">Vertical Jumper Game</h3>
+                            <p class="font-sans text-purple-800 text-sm mt-2 leading-relaxed font-medium">
+                                Jump across dynamic pastel platforms using Spacebar controls! Features high scores, cloud obstacles, and sparkling star collectibles.
+                            </p>
+                            
+                            <div class="mt-8 flex flex-wrap justify-between items-center gap-4">
+                                <div class="flex gap-2">
+                                    <span class="px-3 py-1 bg-purple-50 text-purple-800 text-xs rounded-xl border border-purple-200 font-semibold">Spacebar Jump</span>
+                                    <span class="px-3 py-1 bg-purple-50 text-purple-800 text-xs rounded-xl border border-purple-200 font-semibold">Endless Heights</span>
+                                </div>
+                                
+                                <button onclick="launchGame()" class="px-5 py-2.5 bg-softPurple hover:bg-deepPurple text-white font-display font-bold rounded-2xl text-xs flex items-center gap-2 transition shadow-md cursor-pointer">
+                                    <span>PLAY GAME NOW</span>
+                                    <i data-lucide="sparkles" class="w-4 h-4"></i>
+                                </button>
+                            </div>
+                        </article>
+                    </div>
+                </div>
+
+            </div>
+        </section>
+
+        <!-- CONCEPT 2: VINYL STUDIO -->
+        <section id="concept-2" class="concept-section hidden min-h-full bg-gradient-to-br from-purple-100/80 via-pink-50 to-indigo-100/80 text-purple-950 p-6 md:p-12 transition-all duration-300">
+            <div class="max-w-6xl mx-auto space-y-10">
+                <header class="border-b border-purple-200 pb-8">
+                    <h1 class="font-display text-4xl md:text-5xl font-bold text-purple-950 tracking-tight">Yara's Vinyl Studio</h1>
+                </header>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                    <div onclick="launchGame()" class="group relative bg-white border border-purple-200 rounded-3xl p-5 hover:border-lilac transition duration-300 flex flex-col justify-between overflow-hidden shadow-lg cursor-pointer">
+                        <div class="relative w-full aspect-square bg-purple-100/50 rounded-2xl overflow-hidden mb-5 flex items-center justify-center border border-purple-200 shadow-md">
+                            <div class="vinyl-disc absolute w-[85%] h-[85%] rounded-full bg-purple-950 border-4 border-purple-900 shadow-2xl flex items-center justify-center transition-transform duration-500 ease-out">
+                                <div class="w-[40%] h-[40%] rounded-full bg-lilac flex items-center justify-center text-[8px] font-bold text-purple-950">LP-01</div>
+                            </div>
+                            <div class="vinyl-sleeve relative z-10 w-full h-full bg-gradient-to-br from-purple-500 via-softPurple to-cutePink p-6 flex flex-col justify-between">
+                                <span class="text-xs font-mono text-white font-bold">TRACK 01</span>
+                                <div>
+                                    <h3 class="font-display font-bold text-2xl text-white">Vertical Jumper</h3>
+                                    <span class="text-xs text-purple-100 mt-1 inline-block">Click to launch game ▶</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- CONCEPT 3: BENTO BOX DASHBOARD -->
+        <section id="concept-3" class="concept-section hidden min-h-full bg-gradient-to-br from-purple-50 via-pink-50 to-indigo-50 text-purple-950 p-6 md:p-10 transition-all duration-300">
+            <div class="max-w-6xl mx-auto space-y-6">
+                <h2 class="font-display text-3xl font-bold text-purple-950">Bento Grid View</h2>
+                <div onclick="launchGame()" class="cursor-pointer bg-white p-6 rounded-3xl border border-purple-200 shadow-sm hover:shadow-md transition max-w-lg">
+                    <span class="text-xs font-mono font-bold text-softPurple uppercase">Featured Game</span>
+                    <h3 class="font-display text-2xl font-bold text-purple-950 mt-2">Vertical Jumper Arcade</h3>
+                    <p class="text-sm text-purple-700 mt-2">Click anywhere to start jumping!</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- CONCEPT 4: TACTILE NOOK -->
+        <section id="concept-4" class="concept-section hidden min-h-full bg-amber-50/40 text-purple-950 p-6 md:p-10 transition-all duration-300">
+            <div class="max-w-5xl mx-auto space-y-6">
+                <h2 class="font-display text-3xl font-bold text-purple-950">Cozy Tactile Desk</h2>
+                <div class="p-8 bg-white/80 rounded-3xl border-2 border-amber-200/80 shadow-md">
+                    <p class="font-medium text-purple-900">Welcome to my cozy digital desk nook!</p>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- Game Modal Container -->
+    <div id="game-modal" class="fixed inset-0 z-50 bg-purple-950/70 backdrop-blur-md hidden flex items-center justify-center p-4">
+        <div class="bg-white border-2 border-purple-200 rounded-3xl max-w-xl w-full p-6 shadow-2xl relative flex flex-col items-center">
+            <!-- Close Button -->
+            <button onclick="closeGameModal()" class="absolute top-4 right-4 p-2 bg-purple-100 hover:bg-purple-200 text-purple-900 rounded-full transition cursor-pointer">
+                <i data-lucide="x" class="w-5 h-5"></i>
+            </button>
+
+            <h3 class="font-display text-2xl font-bold text-purple-950 mb-1">Vertical Jumper</h3>
+            <p class="text-xs text-purple-600 mb-4">Press <kbd class="px-2 py-0.5 bg-purple-100 border border-purple-300 rounded text-purple-900 font-mono">Spacebar</kbd> or Click to Jump!</p>
+
+            <!-- Canvas Game Window -->
+            <canvas id="jumperCanvas" width="360" height="480" class="bg-gradient-to-b from-sky-100 to-purple-100 border-2 border-purple-200 rounded-2xl shadow-inner cursor-pointer"></canvas>
+
+            <div class="mt-4 flex gap-3">
+                <button onclick="resetGame()" class="px-4 py-2 bg-softPurple text-white font-display font-bold rounded-xl shadow hover:bg-purple-600 transition text-sm cursor-pointer">Restart Game</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- JavaScript Script -->
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            if (typeof lucide !== 'undefined') {
+                lucide.createIcons();
+            }
+        });
+
+        // Switch Tab Concepts
+        function switchConcept(conceptId) {
+            document.querySelectorAll('.concept-section').forEach(el => el.classList.add('hidden'));
+            document.getElementById(conceptId).classList.remove('hidden');
+
+            document.querySelectorAll('.concept-btn').forEach(btn => {
+                btn.classList.remove('bg-white', 'text-purple-950', 'shadow-sm');
+                btn.classList.add('text-purple-700');
+            });
+
+            const activeBtn = document.getElementById('btn-' + conceptId);
+            if (activeBtn) {
+                activeBtn.classList.add('bg-white', 'text-purple-950', 'shadow-sm');
+                activeBtn.classList.remove('text-purple-700');
+            }
+        }
+
+        // Playable Game Logic
+        let canvas, ctx;
+        let player, platforms, score, gameLoopId;
+        let isPlaying = false;
+
+        function launchGame() {
+            const modal = document.getElementById('game-modal');
+            if (modal) modal.classList.remove('hidden');
+
+            canvas = document.getElementById('jumperCanvas');
+            if (canvas) {
+                ctx = canvas.getContext('2d');
+                resetGame();
+            }
+        }
+
+        function closeGameModal() {
+            const modal = document.getElementById('game-modal');
+            if (modal) modal.classList.add('hidden');
+            cancelAnimationFrame(gameLoopId);
+            isPlaying = false;
+        }
+
+        function resetGame() {
+            cancelAnimationFrame(gameLoopId);
+            score = 0;
+            player = { x: 165, y: 380, width: 30, height: 30, vy: -8, gravity: 0.4 };
+            platforms = [
+                { x: 130, y: 420, width: 100, height: 12 },
+                { x: 50, y: 310, width: 90, height: 12 },
+                { x: 200, y: 200, width: 90, height: 12 },
+                { x: 90, y: 90, width: 90, height: 12 }
+            ];
+            isPlaying = true;
+            gameLoop();
+        }
+
+        function gameLoop() {
+            if (!isPlaying || !ctx) return;
+
+            // Physics Update
+            player.vy += player.gravity;
+            player.y += player.vy;
+
+            // Platform Collision Check
+            platforms.forEach(p => {
+                if (player.vy > 0 && 
+                    player.x + player.width > p.x && 
+                    player.x < p.x + p.width && 
+                    player.y + player.height >= p.y && 
+                    player.y + player.height <= p.y + p.height + 6) {
+                    player.vy = -9.5;
+                }
+            });
+
+            // Camera Movement
+            if (player.y < 200) {
+                let diff = 200 - player.y;
+                player.y = 200;
+                score += Math.floor(diff);
+                platforms.forEach(p => {
+                    p.y += diff;
+                    if (p.y > canvas.height) {
+                        p.y = 0;
+                        p.x = Math.random() * (canvas.width - p.width);
+                    }
+                });
+            }
+
+            // Draw Step
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+            // Draw Platforms
+            ctx.fillStyle = '#c084fc';
+            platforms.forEach(p => {
+                ctx.beginPath();
+                if (ctx.roundRect) {
+                    ctx.roundRect(p.x, p.y, p.width, p.height, 6);
+                } else {
+                    ctx.rect(p.x, p.y, p.width, p.height);
+                }
+                ctx.fill();
+            });
+
+            // Draw Player
+            ctx.fillStyle = '#f472b6';
+            ctx.beginPath();
+            if (ctx.roundRect) {
+                ctx.roundRect(player.x, player.y, player.width, player.height, 8);
+            } else {
+                ctx.rect(player.x, player.y, player.width, player.height);
+            }
+            ctx.fill();
+
+            // Score Display
+            ctx.fillStyle = '#3b0764';
+            ctx.font = 'bold 16px Quicksand, sans-serif';
+            ctx.fillText(`Score: ${score}`, 16, 30);
+
+            // Game Over
+            if (player.y > canvas.height) {
+                ctx.fillStyle = '#581c87';
+                ctx.font = 'bold 22px Fredoka, sans-serif';
+                ctx.fillText('Game Over!', 120, 240);
+                isPlaying = false;
+                return;
+            }
+
+            gameLoopId = requestAnimationFrame(gameLoop);
+        }
+
+        window.addEventListener('keydown', (e) => {
+            if (e.code === 'Space' && isPlaying) {
+                e.preventDefault();
+                player.vy = -9.5;
+            }
+        });
+
+        document.getElementById('jumperCanvas')?.addEventListener('click', () => {
+            if (isPlaying) player.vy = -9.5;
+        });
+    </script>
+</body>
+</html>
