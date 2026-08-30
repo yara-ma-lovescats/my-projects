@@ -156,14 +156,14 @@
             <!-- Global Audio Player Widget -->
             <div class="hidden xl:flex items-center gap-3 bg-white px-3.5 py-2 rounded-2xl border border-purple-200 text-xs text-purple-900 shadow-sm">
                 <div class="relative flex items-center justify-center p-1.5 bg-purple-100 rounded-xl text-softPurple">
-                    <i data-lucide="music-2" class="w-4 h-4 animate-bounce"></i>
+                    <i data-lucide="music-2" id="music-equalizer-icon" class="w-4 h-4"></i>
                 </div>
                 <div class="truncate max-w-[130px]">
                     <div class="font-display font-bold text-purple-950 truncate" id="now-playing-title">Lofi Lavender Beats</div>
-                    <div class="text-[10px] text-purple-500 truncate font-medium">Chill music for coding</div>
+                    <div class="text-[10px] text-purple-500 truncate font-medium" id="now-playing-status">Click play for music ✨</div>
                 </div>
                 <button onclick="toggleGlobalAudio()" id="audio-toggle-btn" class="p-2 bg-purple-50 hover:bg-purple-100 rounded-xl transition text-softPurple border border-purple-200">
-                    <i data-lucide="play" id="audio-icon" class="w-4 h-4 fill-current"></i>
+                    <i data-lucide="play" class="w-4 h-4 fill-current"></i>
                 </button>
             </div>
 
@@ -622,11 +622,11 @@
         </section>
 
         <!-- CONCEPT 4: TACTILE DESK WORKSPACE (LIGHT PASTEL DESK) -->
-        <section id="concept-4" class="concept-section hidden min-h-full bg-gradient-to-br from-purple-100/60 via-pink-100/40 to-amber-50/50 text-purple-950 p-6 md:p-12 transition-all duration-300">
+        <section id="concept-4" class="concept-section hidden min-h-full bg-gradient-to-br from-purple-100/60 via-pink-100/40 to-amber-50/50 text-purple-950 p-6 md:p-12 transition-all duration-500">
             <div class="max-w-5xl mx-auto space-y-8">
                 
                 <!-- Desk Top Header -->
-                <div class="bg-white/90 border border-purple-200 rounded-3xl p-6 flex flex-col md:flex-row justify-between items-start md:items-center gap-4 shadow-md">
+                <div class="bg-white/90 border border-purple-200 rounded-3xl p-6 flex flex-col md:flex-row justify-between items-start md:items-center gap-4 shadow-md transition-all duration-500" id="desk-header">
                     <div>
                         <div class="flex items-center gap-2 text-pink-600 font-mono text-xs font-bold uppercase mb-1">
                             <i data-lucide="coffee" class="w-4 h-4"></i>
@@ -738,14 +738,60 @@
         let isAudioPlaying = false;
         let isDeskLampOn = true;
 
+        // Web Audio API Synthesizer for Lofi Beats
+        let audioCtx = null;
+        let audioInterval = null;
+        let lofiStep = 0;
+
+        function initAudioEngine() {
+            if (!audioCtx) {
+                const AudioContext = window.AudioContext || window.webkitAudioContext;
+                audioCtx = new AudioContext();
+            }
+            if (audioCtx.state === 'suspended') {
+                audioCtx.resume();
+            }
+        }
+
+        function playLofiChord() {
+            if (!audioCtx || !isAudioPlaying) return;
+
+            const chords = [
+                [261.63, 329.63, 392.00, 493.88], // Cmaj7
+                [220.00, 261.63, 329.63, 392.00], // Am7
+                [174.61, 220.00, 261.63, 329.63], // Fmaj7
+                [196.00, 246.94, 293.66, 349.23]  // G7
+            ];
+
+            const currentChord = chords[Math.floor(lofiStep / 4) % chords.length];
+            lofiStep++;
+
+            currentChord.forEach((freq, idx) => {
+                const osc = audioCtx.createOscillator();
+                const gain = audioCtx.createGain();
+                
+                osc.type = 'sine';
+                osc.frequency.setValueAtTime(freq, audioCtx.currentTime + idx * 0.05);
+
+                gain.gain.setValueAtTime(0.001, audioCtx.currentTime);
+                gain.gain.exponentialRampToValueAtTime(0.04, audioCtx.currentTime + 0.1);
+                gain.gain.exponentialRampToValueAtTime(0.0001, audioCtx.currentTime + 1.8);
+
+                osc.connect(gain);
+                gain.connect(audioCtx.destination);
+
+                osc.start(audioCtx.currentTime + idx * 0.05);
+                osc.stop(audioCtx.currentTime + 2.0);
+            });
+        }
+
         // Vertical Jumper Game State
         let gameAnimationId = null;
         let gameCanvas = null;
         let gameCtx = null;
-        let gameState = 'START'; // 'START', 'PLAYING', 'GAMEOVER'
+        let gameState = 'START';
         let score = 0;
         let highScore = 0;
-        let cameraY = 0;
 
         let player = {
             x: 200,
@@ -753,9 +799,9 @@
             radius: 16,
             vx: 0,
             vy: 0,
-            speed: 5,
+            speed: 5.5,
             jumpPower: -10.5,
-            gravity: 0.35
+            gravity: 0.38
         };
 
         let platforms = [];
@@ -770,18 +816,15 @@
         function switchConcept(conceptId) {
             activeConcept = conceptId;
 
-            // Hide all concept sections
             document.querySelectorAll('.concept-section').forEach(section => {
                 section.classList.add('hidden');
             });
 
-            // Show selected section
             const selectedSection = document.getElementById(conceptId);
             if (selectedSection) {
                 selectedSection.classList.remove('hidden');
             }
 
-            // Update Tab Button Styles for Light Theme
             document.querySelectorAll('.concept-btn').forEach(btn => {
                 btn.classList.remove('bg-white', 'text-purple-950', 'border', 'border-purple-200', 'shadow-sm');
                 btn.classList.add('text-purple-700');
@@ -796,36 +839,52 @@
 
         // Toggle Audio Player
         function toggleGlobalAudio() {
+            initAudioEngine();
             isAudioPlaying = !isAudioPlaying;
-            const audioIcon = document.getElementById('audio-icon');
-            if (audioIcon) {
-                if (isAudioPlaying) {
-                    audioIcon.setAttribute('data-lucide', 'pause');
-                } else {
-                    audioIcon.setAttribute('data-lucide', 'play');
-                }
-                lucide.createIcons();
+            
+            const btn = document.getElementById('audio-toggle-btn');
+            const statusText = document.getElementById('now-playing-status');
+            const eqIcon = document.getElementById('music-equalizer-icon');
+
+            if (isAudioPlaying) {
+                if (btn) btn.innerHTML = '<i data-lucide="pause" class="w-4 h-4 fill-current"></i>';
+                if (statusText) statusText.textContent = 'Playing lofi beats ♪';
+                if (eqIcon) eqIcon.classList.add('animate-bounce');
+                audioInterval = setInterval(playLofiChord, 1600);
+                playLofiChord();
+            } else {
+                if (btn) btn.innerHTML = '<i data-lucide="play" class="w-4 h-4 fill-current"></i>';
+                if (statusText) statusText.textContent = 'Click play for music ✨';
+                if (eqIcon) eqIcon.classList.remove('animate-bounce');
+                if (audioInterval) clearInterval(audioInterval);
             }
+            lucide.createIcons();
         }
 
         // Toggle Desk Lamp in Concept 4
         function toggleDeskLamp() {
             isDeskLampOn = !isDeskLampOn;
             const deskSurface = document.getElementById('desk-surface');
+            const deskHeader = document.getElementById('desk-header');
             const statusText = document.getElementById('desk-lamp-status');
+            const conceptSection = document.getElementById('concept-4');
 
-            if (deskSurface && statusText) {
+            if (statusText) {
                 if (isDeskLampOn) {
-                    deskSurface.style.opacity = '1.0';
+                    if (deskSurface) deskSurface.style.opacity = '1.0';
+                    if (deskHeader) deskHeader.style.opacity = '1.0';
+                    if (conceptSection) conceptSection.style.filter = 'brightness(100%)';
                     statusText.textContent = 'Desk Lamp: ON ✨';
                 } else {
-                    deskSurface.style.opacity = '0.45';
+                    if (deskSurface) deskSurface.style.opacity = '0.4';
+                    if (deskHeader) deskHeader.style.opacity = '0.5';
+                    if (conceptSection) conceptSection.style.filter = 'brightness(60%)';
                     statusText.textContent = 'Desk Lamp: OFF 🌙';
                 }
             }
         }
 
-        // Open Game Modal & Initialize Canvas
+        // Open Game Modal & Initialize Canvas with safe dimensions
         function openGameModal() {
             const modal = document.getElementById('game-modal');
             modal.classList.remove('hidden');
@@ -833,12 +892,18 @@
             gameCanvas = document.getElementById('jumperCanvas');
             gameCtx = gameCanvas.getContext('2d');
             
-            // Adjust canvas size to parent container
-            const container = gameCanvas.parentElement;
-            gameCanvas.width = container.clientWidth || 400;
-            gameCanvas.height = container.clientHeight || 450;
+            // Allow DOM reflow then compute dimensions
+            requestAnimationFrame(() => {
+                const container = gameCanvas.parentElement;
+                gameCanvas.width = Math.max(340, container.clientWidth || 380);
+                gameCanvas.height = Math.max(420, container.clientHeight || 450);
 
-            initGame();
+                initGame();
+                
+                if (!gameAnimationId) {
+                    gameLoop();
+                }
+            });
             
             // Event Listeners for Game
             window.addEventListener('keydown', handleKeyDown);
@@ -849,14 +914,15 @@
             const btnLeft = document.getElementById('btn-left');
             const btnRight = document.getElementById('btn-right');
 
-            btnLeft.onmousedown = btnLeft.ontouchstart = (e) => { e.preventDefault(); keys.left = true; };
-            btnLeft.onmouseup = btnLeft.ontouchend = (e) => { e.preventDefault(); keys.left = false; };
-            btnRight.onmousedown = btnRight.ontouchstart = (e) => { e.preventDefault(); keys.right = true; };
-            btnRight.onmouseup = btnRight.ontouchend = (e) => { e.preventDefault(); keys.right = false; };
+            const startLeft = (e) => { e.preventDefault(); keys.left = true; };
+            const stopLeft = (e) => { e.preventDefault(); keys.left = false; };
+            const startRight = (e) => { e.preventDefault(); keys.right = true; };
+            const stopRight = (e) => { e.preventDefault(); keys.right = false; };
 
-            if (!gameAnimationId) {
-                gameLoop();
-            }
+            btnLeft.onmousedown = btnLeft.ontouchstart = startLeft;
+            btnLeft.onmouseup = btnLeft.ontouchend = btnLeft.onmouseleave = stopLeft;
+            btnRight.onmousedown = btnRight.ontouchstart = startRight;
+            btnRight.onmouseup = btnRight.ontouchend = btnRight.onmouseleave = stopRight;
         }
 
         // Close Game Modal
@@ -875,11 +941,10 @@
         // Initialize / Reset Game Variables
         function initGame() {
             score = 0;
-            cameraY = 0;
             gameState = 'START';
 
-            player.x = gameCanvas.width / 2;
-            player.y = gameCanvas.height - 100;
+            player.x = (gameCanvas ? gameCanvas.width : 380) / 2;
+            player.y = (gameCanvas ? gameCanvas.height : 450) - 90;
             player.vx = 0;
             player.vy = player.jumpPower;
 
@@ -887,49 +952,57 @@
             stars = [];
             particles = [];
 
+            const canvasW = gameCanvas ? gameCanvas.width : 380;
+            const canvasH = gameCanvas ? gameCanvas.height : 450;
+
             // Base platform underneath player
             platforms.push({
-                x: gameCanvas.width / 2 - 40,
-                y: gameCanvas.height - 50,
-                width: 80,
+                x: canvasW / 2 - 45,
+                y: canvasH - 45,
+                width: 90,
                 height: 14,
                 isBase: true
             });
 
             // Generate initial stacked cloud platforms
             for (let i = 0; i < 7; i++) {
-                addPlatform(gameCanvas.height - 120 - i * 65);
+                addPlatform(canvasH - 110 - i * 62);
             }
         }
 
         // Helper to add a cloud platform
         function addPlatform(yPos) {
+            const canvasW = gameCanvas ? gameCanvas.width : 380;
             const platWidth = 65 + Math.random() * 25;
-            const platX = Math.random() * (gameCanvas.width - platWidth);
+            const platX = Math.random() * Math.max(10, canvasW - platWidth);
             
             platforms.push({
                 x: platX,
                 y: yPos,
                 width: platWidth,
                 height: 12,
-                vx: Math.random() > 0.6 ? (Math.random() - 0.5) * 2 : 0
+                vx: Math.random() > 0.65 ? (Math.random() - 0.5) * 2 : 0
             });
 
-            // 40% chance of star pickup on platform
             if (Math.random() < 0.4) {
                 stars.push({
                     x: platX + platWidth / 2,
-                    y: yPos - 20,
-                    radius: 8,
+                    y: yPos - 18,
+                    radius: 7,
                     collected: false
                 });
             }
         }
 
         function handleKeyDown(e) {
-            if (e.key === 'ArrowLeft' || e.key === 'a' || e.key === 'A') keys.left = true;
-            if (e.key === 'ArrowRight' || e.key === 'd' || e.key === 'D') keys.right = true;
+            if (e.key === 'ArrowLeft' || e.key === 'a' || e.key === 'A') {
+                keys.left = true;
+            }
+            if (e.key === 'ArrowRight' || e.key === 'd' || e.key === 'D') {
+                keys.right = true;
+            }
             if (e.key === ' ' || e.key === 'Enter') {
+                e.preventDefault();
                 if (gameState === 'START' || gameState === 'GAMEOVER') {
                     initGame();
                     gameState = 'PLAYING';
@@ -951,7 +1024,7 @@
 
         // Particle Burst Effect
         function createSparkles(x, y, color) {
-            for (let i = 0; i < 8; i++) {
+            for (let i = 0; i < 7; i++) {
                 particles.push({
                     x: x,
                     y: y,
@@ -972,24 +1045,20 @@
 
         // Physics & Game Updates
         function updateGame() {
-            if (gameState !== 'PLAYING') return;
+            if (gameState !== 'PLAYING' || !gameCanvas) return;
 
-            // Player Horizontal Movement
             if (keys.left) player.vx = -player.speed;
             else if (keys.right) player.vx = player.speed;
             else player.vx *= 0.8;
 
             player.x += player.vx;
 
-            // Screen Wrap Around Left/Right
             if (player.x < 0) player.x = gameCanvas.width;
             if (player.x > gameCanvas.width) player.x = 0;
 
-            // Apply Gravity
             player.vy += player.gravity;
             player.y += player.vy;
 
-            // Moving Platforms Update
             platforms.forEach(p => {
                 if (p.vx) {
                     p.x += p.vx;
@@ -997,7 +1066,6 @@
                 }
             });
 
-            // Collision with Platforms (Only when falling down)
             if (player.vy > 0) {
                 platforms.forEach(p => {
                     if (
@@ -1012,7 +1080,6 @@
                 });
             }
 
-            // Star Pickups Collision
             stars.forEach(s => {
                 if (!s.collected) {
                     const dist = Math.hypot(player.x - s.x, player.y - s.y);
@@ -1024,29 +1091,24 @@
                 }
             });
 
-            // Camera Scroll Upwards when Player Reaches Top 40%
             if (player.y < gameCanvas.height * 0.4) {
                 const diff = gameCanvas.height * 0.4 - player.y;
                 player.y = gameCanvas.height * 0.4;
                 score += Math.floor(diff);
 
-                // Move all elements down
                 platforms.forEach(p => p.y += diff);
                 stars.forEach(s => s.y += diff);
                 particles.forEach(pt => pt.y += diff);
 
-                // Clean up off-screen platforms and spawn new ones
                 platforms = platforms.filter(p => p.y < gameCanvas.height);
                 stars = stars.filter(s => s.y < gameCanvas.height);
 
-                // Generate new platform at top if needed
                 const highestPlatY = Math.min(...platforms.map(p => p.y));
-                if (highestPlatY > 60) {
-                    addPlatform(highestPlatY - (55 + Math.random() * 20));
+                if (highestPlatY > 55) {
+                    addPlatform(highestPlatY - (50 + Math.random() * 20));
                 }
             }
 
-            // Update Particle Life
             particles.forEach(pt => {
                 pt.x += pt.vx;
                 pt.y += pt.vy;
@@ -1054,18 +1116,27 @@
             });
             particles = particles.filter(pt => pt.life > 0);
 
-            // Game Over Condition (Falling off bottom)
             if (player.y - player.radius > gameCanvas.height) {
                 gameState = 'GAMEOVER';
                 if (score > highScore) highScore = score;
             }
         }
 
-        // Drawing Functions
-        function renderGame() {
-            if (!gameCtx) return;
+        // Safe rounded rect helper
+        function drawPill(ctx, x, y, width, height, r) {
+            ctx.beginPath();
+            if (ctx.roundRect) {
+                ctx.roundRect(x, y, width, height, [r]);
+            } else {
+                ctx.rect(x, y, width, height);
+            }
+            ctx.fill();
+            ctx.stroke();
+        }
 
-            // Clear Background with Lavender Gradient
+        function renderGame() {
+            if (!gameCtx || !gameCanvas) return;
+
             const bgGradient = gameCtx.createLinearGradient(0, 0, 0, gameCanvas.height);
             bgGradient.addColorStop(0, '#2e1065');
             bgGradient.addColorStop(0.5, '#3b0764');
@@ -1073,26 +1144,20 @@
             gameCtx.fillStyle = bgGradient;
             gameCtx.fillRect(0, 0, gameCanvas.width, gameCanvas.height);
 
-            // Draw Stars in Background
-            gameCtx.fillStyle = 'rgba(255, 255, 255, 0.4)';
+            gameCtx.fillStyle = 'rgba(255, 255, 255, 0.35)';
             for (let i = 0; i < 15; i++) {
-                const sx = (i * 37) % gameCanvas.width;
+                const sx = (i * 41) % gameCanvas.width;
                 const sy = (i * 53 + score * 0.1) % gameCanvas.height;
                 gameCtx.fillRect(sx, sy, 2, 2);
             }
 
-            // Draw Platforms (Cute Cloud Pill Shapes)
             platforms.forEach(p => {
                 gameCtx.fillStyle = '#f3e8ff';
                 gameCtx.strokeStyle = '#c084fc';
                 gameCtx.lineWidth = 2;
-                gameCtx.beginPath();
-                gameCtx.roundRect(p.x, p.y, p.width, p.height, [8]);
-                gameCtx.fill();
-                gameCtx.stroke();
+                drawPill(gameCtx, p.x, p.y, p.width, p.height, 6);
             });
 
-            // Draw Star Pickups
             stars.forEach(s => {
                 if (!s.collected) {
                     gameCtx.fillStyle = '#fde68a';
@@ -1104,7 +1169,6 @@
                 }
             });
 
-            // Draw Sparkle Particles
             particles.forEach(pt => {
                 gameCtx.fillStyle = pt.color;
                 gameCtx.globalAlpha = pt.life;
@@ -1114,7 +1178,6 @@
                 gameCtx.globalAlpha = 1.0;
             });
 
-            // Draw Cute Player (Soft Pink Glowing Bunny/Star Ball)
             gameCtx.save();
             gameCtx.fillStyle = '#f472b6';
             gameCtx.shadowColor = '#c084fc';
@@ -1123,7 +1186,6 @@
             gameCtx.arc(player.x, player.y, player.radius, 0, Math.PI * 2);
             gameCtx.fill();
 
-            // Eyes
             gameCtx.fillStyle = '#2e1065';
             gameCtx.beginPath();
             gameCtx.arc(player.x - 5, player.y - 3, 2.5, 0, Math.PI * 2);
@@ -1131,13 +1193,11 @@
             gameCtx.fill();
             gameCtx.restore();
 
-            // Draw UI Overlay & Scores
             gameCtx.font = 'bold 14px Quicksand, sans-serif';
             gameCtx.fillStyle = '#ffffff';
             gameCtx.fillText(`Score: ${score}`, 15, 25);
             gameCtx.fillText(`High: ${highScore}`, gameCanvas.width - 90, 25);
 
-            // Screen Overlays (START & GAMEOVER)
             if (gameState === 'START') {
                 gameCtx.fillStyle = 'rgba(46, 16, 101, 0.75)';
                 gameCtx.fillRect(0, 0, gameCanvas.width, gameCanvas.height);
@@ -1169,9 +1229,8 @@
             }
         }
 
-        // Initialize on page load
         window.onload = function() {
-            switchConcept('concept-3'); // Default to cute pastel Bento Box
+            switchConcept('concept-3');
         }
     </script>
 </body>
