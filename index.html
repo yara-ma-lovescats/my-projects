@@ -271,10 +271,10 @@
                                     <span class="bg-purple-50 border border-purple-200/80 px-2 py-0.5 rounded-md">#game-dev</span>
                                     <span class="bg-purple-50 border border-purple-200/80 px-2 py-0.5 rounded-md">#canvas</span>
                                 </div>
-                                <a href="#" class="font-display text-xs font-bold bg-softPurple text-white px-4 py-2 rounded-xl hover:bg-deepPurple transition flex items-center gap-1.5 shadow-sm">
+                                <button onclick="openGameModal()" class="font-display text-xs font-bold bg-softPurple text-white px-4 py-2 rounded-xl hover:bg-deepPurple transition flex items-center gap-1.5 shadow-sm">
                                     <span>PLAY NOW</span>
                                     <i data-lucide="sparkles" class="w-3.5 h-3.5"></i>
-                                </a>
+                                </button>
                             </div>
                         </article>
 
@@ -378,10 +378,10 @@
                             </p>
                             <div class="flex items-center justify-between pt-2 border-t border-purple-100 text-xs">
                                 <span class="font-mono text-cutePink font-bold text-[11px]">GENRE: BROWSER GAME</span>
-                                <a href="#" class="px-3.5 py-2 bg-softPurple hover:bg-deepPurple text-white font-display font-bold rounded-xl transition flex items-center gap-1.5 text-xs shadow-sm">
+                                <button onclick="openGameModal()" class="px-3.5 py-2 bg-softPurple hover:bg-deepPurple text-white font-display font-bold rounded-xl transition flex items-center gap-1.5 text-xs shadow-sm">
                                     <span>PLAY</span>
                                     <i data-lucide="play" class="w-3 h-3 fill-current"></i>
-                                </a>
+                                </button>
                             </div>
                         </div>
 
@@ -527,10 +527,10 @@
                                 <span class="px-3 py-1 bg-purple-50 text-purple-800 text-xs rounded-xl border border-purple-200 font-semibold">Spacebar Jump</span>
                                 <span class="px-3 py-1 bg-purple-50 text-purple-800 text-xs rounded-xl border border-purple-200 font-semibold">Endless Heights</span>
                             </div>
-                            <a href="#" class="px-5 py-2.5 bg-softPurple hover:bg-deepPurple text-white font-display font-bold rounded-2xl text-xs flex items-center gap-2 transition shadow-md">
+                            <button onclick="openGameModal()" class="px-5 py-2.5 bg-softPurple hover:bg-deepPurple text-white font-display font-bold rounded-2xl text-xs flex items-center gap-2 transition shadow-md">
                                 <span>PLAY GAME NOW</span>
                                 <i data-lucide="sparkles" class="w-4 h-4"></i>
-                            </a>
+                            </button>
                         </div>
                     </div>
 
@@ -657,7 +657,7 @@
                         </p>
                         <div class="pt-2 flex justify-between items-center text-xs font-mono">
                             <span class="text-purple-600 font-bold">Status: Ready to play 🌸</span>
-                            <a href="#" class="px-4 py-2 bg-softPurple text-white rounded-xl font-display font-bold hover:bg-deepPurple transition shadow-sm">Launch Game →</a>
+                            <button onclick="openGameModal()" class="px-4 py-2 bg-softPurple text-white rounded-xl font-display font-bold hover:bg-deepPurple transition shadow-sm">Launch Game →</button>
                         </div>
                     </div>
 
@@ -691,11 +691,77 @@
 
     </main>
 
+    <!-- Vertical Jumper Game Modal -->
+    <div id="game-modal" class="fixed inset-0 z-50 hidden bg-purple-950/70 backdrop-blur-md flex items-center justify-center p-3 sm:p-6 transition-all duration-300">
+        <div class="bg-white rounded-3xl border-2 border-purple-300 shadow-2xl w-full max-w-lg overflow-hidden flex flex-col max-h-[92vh]">
+            <!-- Header -->
+            <div class="p-4 bg-gradient-to-r from-purple-100 via-pink-100 to-indigo-100 border-b border-purple-200 flex items-center justify-between">
+                <div class="flex items-center gap-2.5">
+                    <span class="p-2 bg-softPurple text-white rounded-xl shadow-sm">
+                        <i data-lucide="gamepad-2" class="w-5 h-5"></i>
+                    </span>
+                    <div>
+                        <h3 class="font-display font-bold text-purple-950 text-lg">Vertical Jumper Game ☁️</h3>
+                        <p class="text-[11px] text-purple-700 font-medium">Use Arrow Keys / A & D to move • Bounce on cloud platforms!</p>
+                    </div>
+                </div>
+                <button onclick="closeGameModal()" class="p-2 hover:bg-purple-200/80 rounded-full text-purple-700 transition">
+                    <i data-lucide="x" class="w-5 h-5"></i>
+                </button>
+            </div>
+
+            <!-- Canvas Container -->
+            <div class="relative bg-gradient-to-b from-purple-950 via-indigo-900 to-pink-900 flex-grow flex items-center justify-center min-h-[400px] select-none overflow-hidden">
+                <canvas id="jumperCanvas" class="block w-full h-full max-w-md cursor-pointer"></canvas>
+            </div>
+
+            <!-- Mobile Touch Controls -->
+            <div class="p-3 bg-purple-50 border-t border-purple-200 flex justify-between items-center gap-2 text-xs font-mono">
+                <div class="flex gap-2 w-full sm:w-auto">
+                    <button id="btn-left" class="flex-1 sm:flex-initial px-5 py-2.5 bg-white border border-purple-200 rounded-xl font-bold text-purple-900 active:bg-purple-200 shadow-sm flex items-center justify-center gap-1.5">
+                        <i data-lucide="arrow-left" class="w-4 h-4"></i> LEFT
+                    </button>
+                    <button id="btn-right" class="flex-1 sm:flex-initial px-5 py-2.5 bg-white border border-purple-200 rounded-xl font-bold text-purple-900 active:bg-purple-200 shadow-sm flex items-center justify-center gap-1.5">
+                        RIGHT <i data-lucide="arrow-right" class="w-4 h-4"></i>
+                    </button>
+                </div>
+                <div class="hidden sm:block text-purple-600 font-sans font-semibold text-[11px]">
+                    Collect stars for extra points! ✨
+                </div>
+            </div>
+        </div>
+    </div>
+
     <script>
         // State Management
         let activeConcept = 'concept-3'; // Default concept (Bento Box)
         let isAudioPlaying = false;
         let isDeskLampOn = true;
+
+        // Vertical Jumper Game State
+        let gameAnimationId = null;
+        let gameCanvas = null;
+        let gameCtx = null;
+        let gameState = 'START'; // 'START', 'PLAYING', 'GAMEOVER'
+        let score = 0;
+        let highScore = 0;
+        let cameraY = 0;
+
+        let player = {
+            x: 200,
+            y: 350,
+            radius: 16,
+            vx: 0,
+            vy: 0,
+            speed: 5,
+            jumpPower: -10.5,
+            gravity: 0.35
+        };
+
+        let platforms = [];
+        let stars = [];
+        let particles = [];
+        let keys = { left: false, right: false };
 
         // Initialize Lucide Icons
         lucide.createIcons();
@@ -756,6 +822,350 @@
                     deskSurface.style.opacity = '0.45';
                     statusText.textContent = 'Desk Lamp: OFF 🌙';
                 }
+            }
+        }
+
+        // Open Game Modal & Initialize Canvas
+        function openGameModal() {
+            const modal = document.getElementById('game-modal');
+            modal.classList.remove('hidden');
+            
+            gameCanvas = document.getElementById('jumperCanvas');
+            gameCtx = gameCanvas.getContext('2d');
+            
+            // Adjust canvas size to parent container
+            const container = gameCanvas.parentElement;
+            gameCanvas.width = container.clientWidth || 400;
+            gameCanvas.height = container.clientHeight || 450;
+
+            initGame();
+            
+            // Event Listeners for Game
+            window.addEventListener('keydown', handleKeyDown);
+            window.addEventListener('keyup', handleKeyUp);
+            gameCanvas.addEventListener('click', handleCanvasClick);
+
+            // Touch Control Buttons
+            const btnLeft = document.getElementById('btn-left');
+            const btnRight = document.getElementById('btn-right');
+
+            btnLeft.onmousedown = btnLeft.ontouchstart = (e) => { e.preventDefault(); keys.left = true; };
+            btnLeft.onmouseup = btnLeft.ontouchend = (e) => { e.preventDefault(); keys.left = false; };
+            btnRight.onmousedown = btnRight.ontouchstart = (e) => { e.preventDefault(); keys.right = true; };
+            btnRight.onmouseup = btnRight.ontouchend = (e) => { e.preventDefault(); keys.right = false; };
+
+            if (!gameAnimationId) {
+                gameLoop();
+            }
+        }
+
+        // Close Game Modal
+        function closeGameModal() {
+            const modal = document.getElementById('game-modal');
+            modal.classList.add('hidden');
+            
+            if (gameAnimationId) {
+                cancelAnimationFrame(gameAnimationId);
+                gameAnimationId = null;
+            }
+            window.removeEventListener('keydown', handleKeyDown);
+            window.removeEventListener('keyup', handleKeyUp);
+        }
+
+        // Initialize / Reset Game Variables
+        function initGame() {
+            score = 0;
+            cameraY = 0;
+            gameState = 'START';
+
+            player.x = gameCanvas.width / 2;
+            player.y = gameCanvas.height - 100;
+            player.vx = 0;
+            player.vy = player.jumpPower;
+
+            platforms = [];
+            stars = [];
+            particles = [];
+
+            // Base platform underneath player
+            platforms.push({
+                x: gameCanvas.width / 2 - 40,
+                y: gameCanvas.height - 50,
+                width: 80,
+                height: 14,
+                isBase: true
+            });
+
+            // Generate initial stacked cloud platforms
+            for (let i = 0; i < 7; i++) {
+                addPlatform(gameCanvas.height - 120 - i * 65);
+            }
+        }
+
+        // Helper to add a cloud platform
+        function addPlatform(yPos) {
+            const platWidth = 65 + Math.random() * 25;
+            const platX = Math.random() * (gameCanvas.width - platWidth);
+            
+            platforms.push({
+                x: platX,
+                y: yPos,
+                width: platWidth,
+                height: 12,
+                vx: Math.random() > 0.6 ? (Math.random() - 0.5) * 2 : 0
+            });
+
+            // 40% chance of star pickup on platform
+            if (Math.random() < 0.4) {
+                stars.push({
+                    x: platX + platWidth / 2,
+                    y: yPos - 20,
+                    radius: 8,
+                    collected: false
+                });
+            }
+        }
+
+        function handleKeyDown(e) {
+            if (e.key === 'ArrowLeft' || e.key === 'a' || e.key === 'A') keys.left = true;
+            if (e.key === 'ArrowRight' || e.key === 'd' || e.key === 'D') keys.right = true;
+            if (e.key === ' ' || e.key === 'Enter') {
+                if (gameState === 'START' || gameState === 'GAMEOVER') {
+                    initGame();
+                    gameState = 'PLAYING';
+                }
+            }
+        }
+
+        function handleKeyUp(e) {
+            if (e.key === 'ArrowLeft' || e.key === 'a' || e.key === 'A') keys.left = false;
+            if (e.key === 'ArrowRight' || e.key === 'd' || e.key === 'D') keys.right = false;
+        }
+
+        function handleCanvasClick() {
+            if (gameState === 'START' || gameState === 'GAMEOVER') {
+                initGame();
+                gameState = 'PLAYING';
+            }
+        }
+
+        // Particle Burst Effect
+        function createSparkles(x, y, color) {
+            for (let i = 0; i < 8; i++) {
+                particles.push({
+                    x: x,
+                    y: y,
+                    vx: (Math.random() - 0.5) * 4,
+                    vy: (Math.random() - 0.5) * 4,
+                    life: 1,
+                    color: color
+                });
+            }
+        }
+
+        // Main Game Loop
+        function gameLoop() {
+            updateGame();
+            renderGame();
+            gameAnimationId = requestAnimationFrame(gameLoop);
+        }
+
+        // Physics & Game Updates
+        function updateGame() {
+            if (gameState !== 'PLAYING') return;
+
+            // Player Horizontal Movement
+            if (keys.left) player.vx = -player.speed;
+            else if (keys.right) player.vx = player.speed;
+            else player.vx *= 0.8;
+
+            player.x += player.vx;
+
+            // Screen Wrap Around Left/Right
+            if (player.x < 0) player.x = gameCanvas.width;
+            if (player.x > gameCanvas.width) player.x = 0;
+
+            // Apply Gravity
+            player.vy += player.gravity;
+            player.y += player.vy;
+
+            // Moving Platforms Update
+            platforms.forEach(p => {
+                if (p.vx) {
+                    p.x += p.vx;
+                    if (p.x <= 0 || p.x + p.width >= gameCanvas.width) p.vx *= -1;
+                }
+            });
+
+            // Collision with Platforms (Only when falling down)
+            if (player.vy > 0) {
+                platforms.forEach(p => {
+                    if (
+                        player.x + player.radius > p.x &&
+                        player.x - player.radius < p.x + p.width &&
+                        player.y + player.radius >= p.y &&
+                        player.y + player.radius <= p.y + p.height + player.vy
+                    ) {
+                        player.vy = player.jumpPower;
+                        createSparkles(player.x, player.y + player.radius, '#c084fc');
+                    }
+                });
+            }
+
+            // Star Pickups Collision
+            stars.forEach(s => {
+                if (!s.collected) {
+                    const dist = Math.hypot(player.x - s.x, player.y - s.y);
+                    if (dist < player.radius + s.radius) {
+                        s.collected = true;
+                        score += 50;
+                        createSparkles(s.x, s.y, '#f472b6');
+                    }
+                }
+            });
+
+            // Camera Scroll Upwards when Player Reaches Top 40%
+            if (player.y < gameCanvas.height * 0.4) {
+                const diff = gameCanvas.height * 0.4 - player.y;
+                player.y = gameCanvas.height * 0.4;
+                score += Math.floor(diff);
+
+                // Move all elements down
+                platforms.forEach(p => p.y += diff);
+                stars.forEach(s => s.y += diff);
+                particles.forEach(pt => pt.y += diff);
+
+                // Clean up off-screen platforms and spawn new ones
+                platforms = platforms.filter(p => p.y < gameCanvas.height);
+                stars = stars.filter(s => s.y < gameCanvas.height);
+
+                // Generate new platform at top if needed
+                const highestPlatY = Math.min(...platforms.map(p => p.y));
+                if (highestPlatY > 60) {
+                    addPlatform(highestPlatY - (55 + Math.random() * 20));
+                }
+            }
+
+            // Update Particle Life
+            particles.forEach(pt => {
+                pt.x += pt.vx;
+                pt.y += pt.vy;
+                pt.life -= 0.04;
+            });
+            particles = particles.filter(pt => pt.life > 0);
+
+            // Game Over Condition (Falling off bottom)
+            if (player.y - player.radius > gameCanvas.height) {
+                gameState = 'GAMEOVER';
+                if (score > highScore) highScore = score;
+            }
+        }
+
+        // Drawing Functions
+        function renderGame() {
+            if (!gameCtx) return;
+
+            // Clear Background with Lavender Gradient
+            const bgGradient = gameCtx.createLinearGradient(0, 0, 0, gameCanvas.height);
+            bgGradient.addColorStop(0, '#2e1065');
+            bgGradient.addColorStop(0.5, '#3b0764');
+            bgGradient.addColorStop(1, '#581c87');
+            gameCtx.fillStyle = bgGradient;
+            gameCtx.fillRect(0, 0, gameCanvas.width, gameCanvas.height);
+
+            // Draw Stars in Background
+            gameCtx.fillStyle = 'rgba(255, 255, 255, 0.4)';
+            for (let i = 0; i < 15; i++) {
+                const sx = (i * 37) % gameCanvas.width;
+                const sy = (i * 53 + score * 0.1) % gameCanvas.height;
+                gameCtx.fillRect(sx, sy, 2, 2);
+            }
+
+            // Draw Platforms (Cute Cloud Pill Shapes)
+            platforms.forEach(p => {
+                gameCtx.fillStyle = '#f3e8ff';
+                gameCtx.strokeStyle = '#c084fc';
+                gameCtx.lineWidth = 2;
+                gameCtx.beginPath();
+                gameCtx.roundRect(p.x, p.y, p.width, p.height, [8]);
+                gameCtx.fill();
+                gameCtx.stroke();
+            });
+
+            // Draw Star Pickups
+            stars.forEach(s => {
+                if (!s.collected) {
+                    gameCtx.fillStyle = '#fde68a';
+                    gameCtx.beginPath();
+                    gameCtx.arc(s.x, s.y, s.radius, 0, Math.PI * 2);
+                    gameCtx.fill();
+                    gameCtx.strokeStyle = '#fb7185';
+                    gameCtx.stroke();
+                }
+            });
+
+            // Draw Sparkle Particles
+            particles.forEach(pt => {
+                gameCtx.fillStyle = pt.color;
+                gameCtx.globalAlpha = pt.life;
+                gameCtx.beginPath();
+                gameCtx.arc(pt.x, pt.y, 3, 0, Math.PI * 2);
+                gameCtx.fill();
+                gameCtx.globalAlpha = 1.0;
+            });
+
+            // Draw Cute Player (Soft Pink Glowing Bunny/Star Ball)
+            gameCtx.save();
+            gameCtx.fillStyle = '#f472b6';
+            gameCtx.shadowColor = '#c084fc';
+            gameCtx.shadowBlur = 12;
+            gameCtx.beginPath();
+            gameCtx.arc(player.x, player.y, player.radius, 0, Math.PI * 2);
+            gameCtx.fill();
+
+            // Eyes
+            gameCtx.fillStyle = '#2e1065';
+            gameCtx.beginPath();
+            gameCtx.arc(player.x - 5, player.y - 3, 2.5, 0, Math.PI * 2);
+            gameCtx.arc(player.x + 5, player.y - 3, 2.5, 0, Math.PI * 2);
+            gameCtx.fill();
+            gameCtx.restore();
+
+            // Draw UI Overlay & Scores
+            gameCtx.font = 'bold 14px Quicksand, sans-serif';
+            gameCtx.fillStyle = '#ffffff';
+            gameCtx.fillText(`Score: ${score}`, 15, 25);
+            gameCtx.fillText(`High: ${highScore}`, gameCanvas.width - 90, 25);
+
+            // Screen Overlays (START & GAMEOVER)
+            if (gameState === 'START') {
+                gameCtx.fillStyle = 'rgba(46, 16, 101, 0.75)';
+                gameCtx.fillRect(0, 0, gameCanvas.width, gameCanvas.height);
+
+                gameCtx.fillStyle = '#ffffff';
+                gameCtx.font = 'bold 22px Fredoka, sans-serif';
+                gameCtx.textAlign = 'center';
+                gameCtx.fillText('Vertical Jumper ☁️', gameCanvas.width / 2, gameCanvas.height / 2 - 20);
+
+                gameCtx.font = '13px Quicksand, sans-serif';
+                gameCtx.fillText('Click or Press SPACE to Start', gameCanvas.width / 2, gameCanvas.height / 2 + 15);
+                gameCtx.textAlign = 'left';
+            } else if (gameState === 'GAMEOVER') {
+                gameCtx.fillStyle = 'rgba(46, 16, 101, 0.85)';
+                gameCtx.fillRect(0, 0, gameCanvas.width, gameCanvas.height);
+
+                gameCtx.fillStyle = '#f472b6';
+                gameCtx.font = 'bold 26px Fredoka, sans-serif';
+                gameCtx.textAlign = 'center';
+                gameCtx.fillText('Game Over! 🌸', gameCanvas.width / 2, gameCanvas.height / 2 - 30);
+
+                gameCtx.fillStyle = '#ffffff';
+                gameCtx.font = 'bold 16px Quicksand, sans-serif';
+                gameCtx.fillText(`Final Score: ${score}`, gameCanvas.width / 2, gameCanvas.height / 2 + 5);
+
+                gameCtx.font = '13px Quicksand, sans-serif';
+                gameCtx.fillText('Click or Press SPACE to Play Again', gameCanvas.width / 2, gameCanvas.height / 2 + 40);
+                gameCtx.textAlign = 'left';
             }
         }
 
